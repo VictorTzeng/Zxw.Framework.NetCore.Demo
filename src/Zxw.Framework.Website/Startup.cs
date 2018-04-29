@@ -1,15 +1,11 @@
-﻿using AspectCore.APM.AspNetCore;
-using Butterfly.Client.AspNetCore;
-using log4net;
+﻿using log4net;
 using log4net.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Net.Http;
 using System.Text;
-using Butterfly.Client.Tracing;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Filters;
@@ -42,7 +38,6 @@ namespace Zxw.Framework.Website
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            app.UseHttpProfiler();      //启动Http请求监控
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -119,7 +114,7 @@ namespace Zxw.Framework.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddSingleton<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddTransient<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .RegisterAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             services.AddMvc(option =>
                 {
@@ -127,27 +122,6 @@ namespace Zxw.Framework.Website
                 })
                 .AddControllersAsServices();
             
-            #endregion
-
-            #region APM，注释掉了
-
-            // services.AddAspectCoreAPM(component =>
-            // {
-            //     component.AddApplicationProfiler(); //注册ApplicationProfiler收集GC和ThreadPool数据
-            //     component.AddHttpProfiler();        //注册HttpProfiler收集Http请求数据
-            //     component.AddLineProtocolCollector(options => //注册LineProtocolCollector将数据发送到InfluxDb
-            //     {
-            //         options.Server = "http://localhost:8086"; //你自己的InfluxDB Http地址
-            //         options.Database = "aspectcore";    //你自己创建的Database
-            //     });
-            // });
-
-            //services.AddButterfly(option =>
-            //{
-            //    option.CollectorUrl = "http://localhost:9618";
-            //    option.Service = "demo";
-            //});
-            //services.AddSingleton<HttpClient>(p => new HttpClient(p.GetService<HttpTracingHandler>()));
             #endregion
 
             services.AddOptions();

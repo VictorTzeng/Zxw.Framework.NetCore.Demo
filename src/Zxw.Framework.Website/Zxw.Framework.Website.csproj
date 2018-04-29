@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspectCore.APM.ApplicationProfiler" Version="0.1.4" />
-    <PackageReference Include="AspectCore.APM.AspNetCore" Version="0.1.4" />
-    <PackageReference Include="AspectCore.APM.LineProtocolCollector" Version="0.1.4" />
     <PackageReference Include="Butterfly.Client.AspNetCore" Version="0.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.7" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
@@ -23,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Zxw.Framework.NetCore\Zxw.Framework.NetCore.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.Controllers\Zxw.Framework.Website.Controllers.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.IRepositories\Zxw.Framework.Website.IRepositories.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.Models\Zxw.Framework.Website.Models.csproj" />

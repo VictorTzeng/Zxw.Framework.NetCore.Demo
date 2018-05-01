@@ -6,11 +6,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using EntityFrameworkCore.Triggers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Nelibur.ObjectMapper;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Cache;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Helpers;
+using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.NetCore.Repositories;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
@@ -20,25 +22,38 @@ namespace Zxw.Framework.Website.Repositories
 {
     public class SysMenuRepository : BaseRepository<SysMenu, Int32>, ISysMenuRepository
     {
-        public SysMenuRepository(IDbContextCore dbContext) : base(dbContext)
+        static SysMenuRepository()
         {
             TinyMapper.Bind<SysMenu, SysMenuViewModel>();
             //插入成功后触发
-            Triggers<SysMenu>.Inserted += async entry =>
+            Triggers<SysMenu>.Inserted += AfterInsertedAsync;
+            //修改时触发
+            Triggers<SysMenu>.Updating += WhileUpdatingAsync;
+        }
+        public SysMenuRepository(IDbContextCore dbContext) : base(dbContext)
+        {
+        }
+
+        public static async void AfterInsertedAsync(IInsertedEntry<SysMenu, DbContext> entry)
+        {
+            using (var service = AspectCoreContainer.Resolve<ISysMenuRepository>())
             {
-                var parentMenu = await GetSingleAsync(entry.Entity.ParentId);
+                var parentMenu = await service.GetSingleAsync(entry.Entity.ParentId);
                 entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
                 entry.Entity.SortIndex = entry.Entity.Id;
                 await entry.Context.SaveChangesWithTriggersAsync(entry.Context.SaveChangesAsync);
                 await DistributedCacheManager.RemoveAsync("Redis_Cache_SysMenu");//插入成功后清除缓存以更新
-            };
-            //修改时触发
-            Triggers<SysMenu>.Updating += entry =>
+            }
+        }
+
+        public static async void WhileUpdatingAsync(IUpdatingEntry<SysMenu, DbContext> entry)
+        {
+            using (var service = AspectCoreContainer.Resolve<ISysMenuRepository>())
             {
-                var parentMenu = GetSingle(entry.Entity.ParentId);
+                var parentMenu = await service.GetSingleAsync(entry.Entity.ParentId);
                 entry.Entity.SortIndex = entry.Entity.Id;
                 entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
-            };
+            }
         }
         public IList<SysMenuViewModel> GetHomeMenusByTreeView(Expression<Func<SysMenu, bool>> where)
         {

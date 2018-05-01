@@ -114,7 +114,7 @@ namespace Zxw.Framework.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddTransient<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .RegisterAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             services.AddMvc(option =>
                 {

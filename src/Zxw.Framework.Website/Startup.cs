@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Filters;
@@ -48,6 +49,7 @@ namespace Zxw.Framework.Website
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -114,17 +116,23 @@ namespace Zxw.Framework.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
-                .RegisterAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
+                .AddTransient<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddTransientAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
+            
+            #endregion
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Index";
+                    options.LogoutPath = "/Account/Logout";
+                });
+            services.AddOptions();
             services.AddMvc(option =>
                 {
                     option.Filters.Add(new GlobalExceptionFilter());
                 })
                 .AddControllersAsServices();
-            
-            #endregion
-
-            services.AddOptions();
 
             return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector
         }

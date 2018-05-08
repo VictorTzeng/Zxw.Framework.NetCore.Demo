@@ -9,17 +9,17 @@ using Zxw.Framework.Website.IRepositories;
 
 namespace Zxw.Framework.Website.Controllers.Filters
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Method)]
     public class RequestFilter:ActionFilterAttribute
     {
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var identity = context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"];
             if (!context.Filters.Contains(new IgnoreAttribute()))
             {
                 var repository =
                     (ISysMenuRepository) context.HttpContext.RequestServices.GetService(typeof(ISysMenuRepository));
-                var identity = context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"];
-                if (await repository.CountAsync(
+                if (repository.Count(
                         m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase) && m.Activable) <= 0)
                 {
                     if (context.HttpContext.Request.IsAjaxRequest())

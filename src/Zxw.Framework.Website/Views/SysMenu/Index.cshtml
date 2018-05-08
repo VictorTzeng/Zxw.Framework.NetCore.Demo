@@ -14,45 +14,55 @@
 </style>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <button class="btn btn-success" data-bind="click:function(){$root.add('@Url.Action("Create")','新建模块');}"><i class="fa fa-plus"></i>&nbsp;新建</button>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i> 搜索</button>
+                </span>
+            </div>
         </div>
         <div class="col-md-12">
             <table class="table table-bordered table-hover table-striped" style="margin-top: 10px;">
                 <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>名称</td>
-                    <td>标识</td>
-                    <td>路径</td>
-                    <td>是否启用</td>
-                    <td>是否显示</td>
-                    <td>操作</td>
-                </tr>
+                    <tr>
+                        <td>ID</td>
+                        <td>名称</td>
+                        <td>标识</td>
+                        <td>路径</td>
+                        <td>是否启用</td>
+                        <td>是否显示</td>
+                        <td>操作</td>
+                    </tr>
                 </thead>
                 <tbody data-bind="foreach:rows">
-                <tr>
-                    <td data-bind="text:($root.pageIndex()-1)*$root.pageSize()+$index()+1"></td>
-                    <td data-bind="text:menuName" style="text-align: left;"></td>
-                    <td data-bind="text:identity" style="text-align: left;"></td>
-                    <td data-bind="text:routeUrl" style="text-align: left;"></td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" data-bind="checked:activable, click:function(){$root.active('@Url.Action("Active")/'+id(),{});}" >
-                            <span class="slider round"></span>
-                        </label>
-                    </td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" data-bind="checked:visiable, click:function(){$root.visualize('@Url.Action("Visualize")/'+id(),{});}" >
-                            <span class="slider round"></span>
-                        </label>                            
-                    </td>
-                    <td>
-                        <a href="javascript:;" title="编辑" data-bind="click:function(){$root.edit('@Url.Action("Edit")/'+id(),'编辑模块');}"><i class="fa fa-edit"></i></a>
-                        <a href="javascript:;" title="删除" data-bind="click:function(){$root.remove('@Url.Action("Delete")/'+id(),{});}"><i class="far fa-trash-alt"></i></a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td data-bind="text:($root.pageIndex()-1)*$root.pageSize()+$index()+1"></td>
+                        <td data-bind="text:menuName" style="text-align: left;"></td>
+                        <td data-bind="text:identity" style="text-align: left;"></td>
+                        <td data-bind="text:routeUrl" style="text-align: left;"></td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" data-bind="checked:activable, click:function(){$root.active('@Url.Action("Active")/'+id(),{});}">
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <!-- ko if:visiable() -->
+                            <i class="fa fa-eye fa-2x" style="color: #55a856; cursor: pointer;" data-bind="click:function(){$root.visualize('@Url.Action("Visualize")/'+id(),{});}"></i>
+                            <!-- /ko -->
+                            <!-- ko ifnot:visiable() -->
+                            <i class="fa fa-eye-slash fa-2x" style="cursor: pointer;" data-bind="click:function(){$root.visualize('@Url.Action("Visualize")/'+id(),{});}"></i>
+                            <!-- /ko -->
+                        </td>
+                        <td>
+                            <a href="javascript:;" title="编辑" data-bind="click:function(){$root.edit('@Url.Action("Edit")/'+id(),'编辑模块');}"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:;" title="删除" data-bind="click:function(){$root.remove('@Url.Action("Delete")/'+id(),{});}"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             @Html.Partial("_PartialPagination")

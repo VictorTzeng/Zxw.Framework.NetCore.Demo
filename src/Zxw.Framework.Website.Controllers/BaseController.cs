@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Zxw.Framework.Website.Controllers.Filters;
 
 namespace Zxw.Framework.Website.Controllers
 {
-    [RequestFilter]
+    [Authorize, RequestFilter]
     public abstract class BaseController : Controller
     {
     }

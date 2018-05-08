@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Zxw.Framework.NetCore" Version="1.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Zxw.Framework.Website.Models\Zxw.Framework.Website.Models.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.ViewModels\Zxw.Framework.Website.ViewModels.csproj" />
   </ItemGroup>

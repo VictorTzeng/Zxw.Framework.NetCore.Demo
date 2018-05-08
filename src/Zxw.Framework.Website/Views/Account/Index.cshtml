@@ -40,13 +40,14 @@
         <div class="login-box-body">
             <p class="login-box-msg">欢迎使用</p>
 
-            <form action="#" method="post">
+            <form action="@Url.Action("SignIn")" method="post" role="form" id="login-form">
+                @Html.AntiForgeryToken()
                 <div class="form-group has-feedback">
-                    <input type="email" class="form-control" placeholder="用户名">
+                    <input type="text" class="form-control" placeholder="用户名/电话/邮箱" name="account" required>
                     <span class="fa fa-user-circle form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="密码">
+                    <input type="password" class="form-control" placeholder="密码" name="password" required>
                     <span class="fa fa-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
@@ -58,7 +59,7 @@
                 </div>
             </form>
 
-            <div class="social-auth-links text-center">
+            @*<div class="social-auth-links text-center">
                 <p>- OR -</p>
                 <a href="#">
                     <i class="fa fa-qq fa-2x text-blue"></i>
@@ -67,43 +68,58 @@
                 <a href="#">
                     <i class="fa fa-wechat fa-2x text-success"></i>
                 </a>
-                @*<a href="#">
-                    <i class="fa fa-weibo fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa fa-twitter fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa fa-facebook fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa fa-whatsapp fa-2x"></i>
-                </a>*@
-            </div>
-            <!-- /.social-auth-links -->
+<a href="#">
+            <i class="fa fa-weibo fa-2x"></i>
+        </a>
+        <a href="#">
+            <i class="fa fa-twitter fa-2x"></i>
+        </a>
+        <a href="#">
+            <i class="fa fa-facebook fa-2x"></i>
+        </a>
+        <a href="#">
+            <i class="fa fa-2x"></i>
+        </a>
+        <a href="#">
+            <i class="fa fa-whatsapp fa-2x"></i>
+        </a>
+        </div>*@
+        <!-- /.social-auth-links -->
 
-            <a href="#">忘记密码?</a><br>
+        <a href="#">忘记密码?</a><br>
         </div>
         <!-- /.login-box-body -->
     </div>
     <!-- /.login-box -->
     <!-- jQuery 3 -->
     <script src="~/components/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap 4.1.0 -->
-    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <!-- iCheck -->
-    <script src="~/lib/iCheck/icheck.min.js"></script>
-    <script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' /* optional */
-    });
-  });
+    <script src="~/lib/layer/layer.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- jquery.form.js -->
+    <script src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#login-form").ajaxForm({
+                //dataType: "json",
+                //beforeSubmit: function() {
+                //    return true;
+                //},
+                success: function(rep) {
+                    if (rep.success == true) {
+                        layer.msg("登录成功",
+                            function() {
+                                location.href = '@Url.Action("Index","Home")';
+                            });
+                    } else {
+                        layer.alert(rep.msg, { icon: 5 });
+                    }
+                },
+                error: function() {
+                    layer.alert("网络开小差啦，请稍候再试", { icon: 5 });
+                }
+            });
+        });
     </script>
 </body>
 </html>

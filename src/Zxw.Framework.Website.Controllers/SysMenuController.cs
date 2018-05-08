@@ -1,9 +1,13 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Zxw.Framework.NetCore.Attributes;
+using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Models;
+using Zxw.Framework.NetCore.Options;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
 using Zxw.Framework.Website.ViewModels;
@@ -104,12 +108,15 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [AjaxRequestOnly, HttpGet]
-        public Task<IActionResult> GetMenusByPaged(int pageSize, int pageIndex)
+        public Task<IActionResult> GetMenusByPaged(int pageSize, int pageIndex, string keyword)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var total = menuRepository.CountAsync(m => true).Result;
-                var rows = menuRepository.GetByPagination(m => true, pageSize, pageIndex, true,
+                Expression<Func<SysMenu, bool>> filter = m=>true;
+                if(!string.IsNullOrEmpty(keyword))
+                    filter = filter.And(m=>m.Identity.Contains(keyword));
+                var total = menuRepository.CountAsync(filter).Result;
+                var rows = menuRepository.GetByPagination(filter, pageSize, pageIndex, true,
                     m => m.Id).ToList();
                 return Json(PaginationResult.PagedResult(rows, total, pageSize, pageIndex));
             });

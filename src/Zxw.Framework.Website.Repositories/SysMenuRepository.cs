@@ -41,7 +41,7 @@ namespace Zxw.Framework.Website.Repositories
                 var parentMenu = await service.GetSingleAsync(entry.Entity.ParentId);
                 entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
                 entry.Entity.SortIndex = entry.Entity.Id;
-                await entry.Context.SaveChangesWithTriggersAsync(entry.Context.SaveChangesAsync);
+                service.Update(entry.Entity, false, "MenuPath", "SortIndex");
                 await DistributedCacheManager.RemoveAsync("Redis_Cache_SysMenu");//插入成功后清除缓存以更新
             }
         }
@@ -71,12 +71,11 @@ namespace Zxw.Framework.Website.Repositories
         /// <summary>
         /// 初始化系统模块
         /// </summary>
-        public void InitSysMenus(string controllerAssemblyName)
+        public async void InitSysMenus(string controllerAssemblyName)
         {
             var assembly = Assembly.Load(controllerAssemblyName);
             var types = assembly?.GetTypes();
             var list = types?.Where(t =>t.Name.Contains("Controller") && !t.IsAbstract).ToList();
-            var menus = new List<SysMenu>();
             if (list != null)
             {
                 foreach (var type in list)
@@ -85,29 +84,39 @@ namespace Zxw.Framework.Website.Repositories
                     var methods = type.GetMethods().Where(m =>
                         m.IsPublic && (m.ReturnType == typeof(IActionResult) ||
                                        m.ReturnType == typeof(Task<IActionResult>)));
+                    var parentIdentity = $"{controllerName}";
+                    if (Count(m => m.Identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)) == 0)
+                    {
+                        await AddAsync(new SysMenu()
+                        {
+                            MenuName = parentIdentity,
+                            Activable = true,
+                            Visiable = true,
+                            Identity = parentIdentity,
+                            RouteUrl = "",
+                            ParentId = 0
+                        }, true);
+                    }
+
                     foreach (var method in methods)
                     {
                         var identity = $"{controllerName}/{method.Name}";
-                        if (Count(m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase)) == 0 &&
-                            !menus.Any(m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase)))
+                        if (Count(m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase)) == 0)
                         {
-                            menus.Add(new SysMenu()
+                            await AddAsync(new SysMenu()
                             {
                                 MenuName = method.Name,
                                 Activable = true,
                                 Visiable = method.GetCustomAttribute<AjaxRequestOnlyAttribute>() == null,
                                 Identity = identity,
                                 RouteUrl = identity,
-                                ParentId = 0
-                            });
+                                ParentId = identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)
+                                    ? 0
+                                    : GetSingleOrDefault(x => x.Identity == parentIdentity)?.Id ?? 0
+                            }, true);
                         }
                     }
                 }
-            }
-
-            if (menus.Any())
-            {
-                AddRange(menus, true);
             }
         }
 

@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website.Contr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website", "Zxw.Framework.Website\Zxw.Framework.Website.csproj", "{C8446360-B218-48AB-A944-9298E3FCA368}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Wechat", "..\..\Zxw.Framework.NetCore\Zxw.Framework.Wechat\Zxw.Framework.Wechat.csproj", "{750C4B51-722B-4738-9F96-FD4F90EFFBC1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{C8446360-B218-48AB-A944-9298E3FCA368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8446360-B218-48AB-A944-9298E3FCA368}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8446360-B218-48AB-A944-9298E3FCA368}.Release|Any CPU.Build.0 = Release|Any CPU
-		{750C4B51-722B-4738-9F96-FD4F90EFFBC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{750C4B51-722B-4738-9F96-FD4F90EFFBC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{750C4B51-722B-4738-9F96-FD4F90EFFBC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{750C4B51-722B-4738-9F96-FD4F90EFFBC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

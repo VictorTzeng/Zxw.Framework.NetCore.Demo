@@ -123,7 +123,7 @@ namespace Zxw.Framework.Website.Repositories
         private IList<SysMenuViewModel> GetHomeTreeMenu(Expression<Func<SysMenu, bool>> where)
         {
             var reslut = new List<SysMenuViewModel>();
-            var children = Get(where).OrderBy(m => m.SortIndex);
+            var children = Get(where).OrderBy(m => m.SortIndex).ToList();
             foreach (var child in children)
             {
                 var tmp = new SysMenuViewModel();
@@ -137,7 +137,7 @@ namespace Zxw.Framework.Website.Repositories
         private IList<SysMenuViewModel> GetTreeMenu(Expression<Func<SysMenu, bool>> where)
         {
             var reslut = new List<SysMenuViewModel>();
-            var children = Get(where).OrderBy(m => m.SortIndex);
+            var children = Get(where).OrderBy(m => m.SortIndex).ToList();
             foreach (var child in children)
             {
                 var tmp = new SysMenuViewModel();

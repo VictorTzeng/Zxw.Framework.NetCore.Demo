@@ -13,6 +13,8 @@ using Zxw.Framework.NetCore.Filters;
 using Zxw.Framework.NetCore.Helpers;
 using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.NetCore.Options;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Zxw.Framework.Website
 {
@@ -32,6 +34,12 @@ namespace Zxw.Framework.Website
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
             return InitIoC(services);
         }
 
@@ -42,20 +50,23 @@ namespace Zxw.Framework.Website
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
-            app.UseStaticFiles();
-            app.UseAuthentication();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+
+            app.UseHttpsRedirection()
+                .UseStaticFiles()
+                .UseCookiePolicy()
+                .UseAuthentication()
+                .UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+                });
         }
         /// <summary>
         /// IoC初始化
@@ -116,7 +127,7 @@ namespace Zxw.Framework.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddTransient<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .AddTransientAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             
             #endregion
@@ -132,6 +143,7 @@ namespace Zxw.Framework.Website
                 {
                     option.Filters.Add(new GlobalExceptionFilter());
                 })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddControllersAsServices();
 
             return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector

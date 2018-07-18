@@ -12,9 +12,11 @@ namespace Zxw.Framework.Website.Controllers
     [Ignore]
     public class HomeController : BaseController
     {
-        public HomeController()
+        private ISysMenuRepository menuRepository;
+        public HomeController(ISysMenuRepository menuRepository)
         {
             //CodeGenerator.Generate();//生成所有实体类对应的Repository和Service层代码文件
+            this.menuRepository = menuRepository;
         }
         public IActionResult Index()
         {
@@ -30,11 +32,19 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Init([FromServices]ISysMenuRepository menuRepository, 
-            [FromServices]IOptions<CodeGenerateOption> options)
+        public IActionResult Init([FromServices]IOptions<CodeGenerateOption> options)
         {
             menuRepository.InitSysMenus(options.Value.ControllersNamespace);
             return Ok();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                menuRepository.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

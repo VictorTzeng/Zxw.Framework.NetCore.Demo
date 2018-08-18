@@ -88,7 +88,7 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [HttpPost, AjaxRequestOnly, ValidateAntiForgeryToken]
-        public Task<IActionResult> ChangePassword(int userId, string oldPwd, string newPwd)
+        public Task<IActionResult> ChangePassword(string userId, string oldPwd, string newPwd)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {

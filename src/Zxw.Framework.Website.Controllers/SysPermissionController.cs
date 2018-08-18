@@ -88,7 +88,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AjaxRequestOnly]
-        public Task<IActionResult> Delete(int id)
+        public Task<IActionResult> Delete(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {

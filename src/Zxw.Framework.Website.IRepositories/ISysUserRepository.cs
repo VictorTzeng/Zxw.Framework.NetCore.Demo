@@ -5,7 +5,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.IRepositories
 {
-    public interface ISysUserRepository:IRepository<SysUser, Int32>
+    public interface ISysUserRepository:IRepository<SysUser, string>
     {
         /// <summary>
         /// µÇÂ¼
@@ -31,7 +31,7 @@ namespace Zxw.Framework.Website.IRepositories
         /// <param name="userName"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-        (bool, string) EditProfile(int userId, string telephone, string userName, string email);
+        (bool, string) EditProfile(string userId, string telephone, string userName, string email);
         /// <summary>
         /// ÐÞ¸ÄÃÜÂë
         /// </summary>
@@ -39,13 +39,13 @@ namespace Zxw.Framework.Website.IRepositories
         /// <param name="oldPwd"></param>
         /// <param name="newPwd"></param>
         /// <returns></returns>
-        (bool, string) ChangePassword(int userId, string oldPwd, string newPwd);
+        (bool, string) ChangePassword(string userId, string oldPwd, string newPwd);
         /// <summary>
         /// ÕËºÅÆôÍ£ÓÃ
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="activable"></param>
         /// <returns></returns>
-        (bool, string) Active(int userId, bool activable);
+        (bool, string) Active(string userId, bool activable);
     }
 }

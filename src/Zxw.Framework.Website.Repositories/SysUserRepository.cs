@@ -8,7 +8,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.Repositories
 {
-    public class SysUserRepository : BaseRepository<SysUser, Int32>, ISysUserRepository
+    public class SysUserRepository : BaseRepository<SysUser, string>, ISysUserRepository
     {
         public SysUserRepository(IDbContextCore dbContext) : base(dbContext)
         {
@@ -48,7 +48,7 @@ namespace Zxw.Framework.Website.Repositories
             return Add(model) > 0;
         }
 
-        public (bool, string) EditProfile(int userId, string telephone, string userName, string email)
+        public (bool, string) EditProfile(string userId, string telephone, string userName, string email)
         {
             var entity = GetSingle(userId);
             if (entity == null)
@@ -81,7 +81,7 @@ namespace Zxw.Framework.Website.Repositories
             return (false, "未做任何更改");
         }
 
-        public (bool, string) ChangePassword(int userId, string oldPwd, string newPwd)
+        public (bool, string) ChangePassword(string userId, string oldPwd, string newPwd)
         {
             var entity = GetSingle(userId);
             if (entity == null)
@@ -94,7 +94,7 @@ namespace Zxw.Framework.Website.Repositories
             return Update(entity, false, "SysPassword") > 0 ? (true, "操作成功") : (false, "操作失败");
         }
 
-        public (bool, string) Active(int userId, bool activable)
+        public (bool, string) Active(string userId, bool activable)
         {
             var entity = GetSingle(userId);
             if (entity == null)

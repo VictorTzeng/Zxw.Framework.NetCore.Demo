@@ -6,7 +6,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.Repositories
 {
-    public class SysPermissionRepository : BaseRepository<SysPermission, Int32>, ISysPermissionRepository
+    public class SysPermissionRepository : BaseRepository<SysPermission, string>, ISysPermissionRepository
     {
         public SysPermissionRepository(IDbContextCore dbContext) : base(dbContext)
         {

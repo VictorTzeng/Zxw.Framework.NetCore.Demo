@@ -35,7 +35,7 @@ namespace Zxw.Framework.Website.Controllers
             return View();
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string id)
         {
             return View(menuRepository.GetSingle(id));
         }
@@ -49,17 +49,18 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var rows = menuRepository.GetHomeMenusByTreeView(m=>m.Activable && m.Visiable && m.ParentId == 0).OrderBy(m=>m.SortIndex).ToList();
+                var rows = menuRepository.GetHomeMenusByTreeView(m=>m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId)).OrderBy(m=>m.SortIndex).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
             });
         }
 
         [AjaxRequestOnly, HttpGet]
-        public Task<IActionResult> GetTreeMenus(int parentId = 0)
+        public Task<IActionResult> GetTreeMenus(string parentId = null)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var nodes = menuRepository.GetMenusByTreeView(m=>m.Activable && m.ParentId == 0).OrderBy(m => m.SortIndex).Select(m=>GetTreeMenus(m,parentId)).ToList();
+                var nodes = menuRepository.GetMenusByTreeView(m => m.Activable && string.IsNullOrEmpty(m.ParentId))
+                    .OrderBy(m => m.SortIndex).Select(m => GetTreeMenus(m, parentId)).ToList();
                 var rows = new[]
                 {
                     new
@@ -70,7 +71,7 @@ namespace Zxw.Framework.Website.Controllers
                         nodes,
                         state = new
                         {
-                            selected = 0 == parentId
+                            selected = string.IsNullOrEmpty(parentId)
                         }
                     }
                 };
@@ -78,7 +79,7 @@ namespace Zxw.Framework.Website.Controllers
             });
         }
 
-        private object GetTreeMenus(SysMenuViewModel viewModel, int parentId = 0)
+        private object GetTreeMenus(SysMenuViewModel viewModel, string parentId = null)
         {
             if (viewModel.Children.Any())
             {
@@ -87,7 +88,7 @@ namespace Zxw.Framework.Website.Controllers
                     text = " "+viewModel.MenuName,
                     icon = viewModel.MenuIcon,
                     tags = viewModel.Id.ToString(),
-                    nodes = viewModel.Children.Select(GetTreeMenus),
+                    nodes = viewModel.Children.Select(x=>GetTreeMenus(x, parentId)),
                     state = new
                     {
                         expanded = false,
@@ -159,7 +160,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AjaxRequestOnly]
-        public Task<IActionResult> Delete(int id)
+        public Task<IActionResult> Delete(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
@@ -174,7 +175,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AjaxRequestOnly]
-        public Task<IActionResult> Active(int id)
+        public Task<IActionResult> Active(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
@@ -190,7 +191,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AjaxRequestOnly]
-        public Task<IActionResult> Visualize(int id)
+        public Task<IActionResult> Visualize(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {

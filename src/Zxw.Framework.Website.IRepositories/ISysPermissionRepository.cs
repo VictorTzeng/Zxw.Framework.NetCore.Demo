@@ -4,7 +4,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.IRepositories
 {
-    public interface ISysPermissionRepository:IRepository<SysPermission, Int32>
+    public interface ISysPermissionRepository:IRepository<SysPermission, string>
     {
     }
 }

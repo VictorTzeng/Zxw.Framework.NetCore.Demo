@@ -1,19 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Zxw.Framework.NetCore.Models;
 
 namespace Zxw.Framework.Website.Models
 {
     [Table("SysMenu")]
-    public class SysMenu:BaseModel<int>
+    public class SysMenu:BaseModel<string>
     {
         [Key]
         [Column("SysMenuId")]
-        public override int Id { get; set; }
+        public override string Id { get; set; }
 
-        public int ParentId { get; set; } = 0;
+        public string ParentId { get; set; } = String.Empty;
 
-        [MaxLength(50)]
+        [MaxLength(2000)]
         public string MenuPath { get; set; }
 
         [Required]
@@ -35,6 +36,7 @@ namespace Zxw.Framework.Website.Models
 
         public bool Activable { get; set; } = true;
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SortIndex { get; set; }
     }
 }

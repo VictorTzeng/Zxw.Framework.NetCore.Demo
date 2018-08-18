@@ -8,11 +8,11 @@ using Zxw.Framework.NetCore.Models;
 namespace Zxw.Framework.Website.Models
 {
     [Table("SysPermission")]
-    public class SysPermission:BaseModel<int>
+    public class SysPermission:BaseModel<string>
     {
         [Key]
         [Column("SysPermissionId")]
-        public override int Id { get; set; }
+        public override string Id { get; set; }
 
 
     }

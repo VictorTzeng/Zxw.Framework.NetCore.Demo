@@ -6,7 +6,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.Repositories
 {
-    public class SysRoleRepository : BaseRepository<SysRole, Int32>, ISysRoleRepository
+    public class SysRoleRepository : BaseRepository<SysRole, string>, ISysRoleRepository
     {
         public SysRoleRepository(IDbContextCore dbContext) : base(dbContext)
         {

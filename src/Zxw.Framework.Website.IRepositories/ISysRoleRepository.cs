@@ -4,7 +4,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.IRepositories
 {
-    public interface ISysRoleRepository:IRepository<SysRole, Int32>
+    public interface ISysRoleRepository:IRepository<SysRole, string>
     {
     }
 }

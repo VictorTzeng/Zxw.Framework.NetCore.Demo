@@ -6,11 +6,11 @@ using Zxw.Framework.NetCore.Models;
 namespace Zxw.Framework.Website.Models
 {
     [Table("SysUser"), Serializable]
-    public class SysUser:BaseModel<int>
+    public class SysUser:BaseModel<string>
     {
         [Key]
         [Column("SysUserId")]
-        public override int Id { get; set; }
+        public override string Id { get; set; }
 
         [Required]
         [MaxLength(20)]

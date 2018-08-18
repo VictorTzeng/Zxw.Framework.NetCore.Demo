@@ -145,7 +145,7 @@
         $(function() {
             ko.applyBindings(sysMenuModel);
             $("#MenuIcon").iconpicker();
-            sysMenuModel.get('@Url.Action("GetTreeMenus")', {parentId:@Model.ParentId}, function(rep) {
+            sysMenuModel.get('@Url.Action("GetTreeMenus")', {parentId:'@Model.ParentId'}, function(rep) {
                 if (rep.success == true) {
                     $("#treeview").treeview({
                         data: rep.rows,

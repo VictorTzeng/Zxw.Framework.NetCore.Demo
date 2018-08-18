@@ -20,7 +20,7 @@ using Zxw.Framework.Website.ViewModels;
 
 namespace Zxw.Framework.Website.Repositories
 {
-    public class SysMenuRepository : BaseRepository<SysMenu, Int32>, ISysMenuRepository
+    public class SysMenuRepository : BaseRepository<SysMenu, string>, ISysMenuRepository
     {
         static SysMenuRepository()
         {
@@ -38,10 +38,23 @@ namespace Zxw.Framework.Website.Repositories
         {
             using (var service = AspectCoreContainer.Resolve<ISysMenuRepository>())
             {
-                var parentMenu = service.GetSingle(entry.Entity.ParentId);
-                entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
-                entry.Entity.SortIndex = entry.Entity.Id;
-                service.Update(entry.Entity, false, "MenuPath", "SortIndex");
+                if (string.IsNullOrEmpty(entry.Entity.ParentId))
+                {
+                    entry.Entity.MenuPath = entry.Entity.Id;
+                }
+                else
+                {
+                    var parentMenu = service.GetSingle(entry.Entity.ParentId);
+                    if (string.IsNullOrEmpty(parentMenu?.MenuPath))
+                    {
+                        entry.Entity.MenuPath = entry.Entity.Id;
+                    }
+                    else
+                    {
+                        entry.Entity.MenuPath = parentMenu.MenuPath + "," + entry.Entity.Id;
+                    }
+                }
+                service.Update(entry.Entity, false, "MenuPath");
                 DistributedCacheManager.Remove("Redis_Cache_SysMenu");//����ɹ�����������Ը���
             }
         }
@@ -51,8 +64,14 @@ namespace Zxw.Framework.Website.Repositories
             using (var service = AspectCoreContainer.Resolve<ISysMenuRepository>())
             {
                 var parentMenu = service.GetSingle(entry.Entity.ParentId);
-                entry.Entity.SortIndex = entry.Entity.Id;
-                entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
+                if (string.IsNullOrEmpty(parentMenu?.MenuPath))
+                {
+                    entry.Entity.MenuPath = entry.Entity.Id;
+                }
+                else
+                {
+                    entry.Entity.MenuPath = parentMenu.MenuPath + "," + entry.Entity.Id;
+                }
             }
         }
         public IList<SysMenuViewModel> GetHomeMenusByTreeView(Expression<Func<SysMenu, bool>> where)
@@ -94,7 +113,7 @@ namespace Zxw.Framework.Website.Repositories
                             Visiable = true,
                             Identity = parentIdentity,
                             RouteUrl = "",
-                            ParentId = 0
+                            ParentId = String.Empty
                         }, true);
                     }
 
@@ -111,8 +130,8 @@ namespace Zxw.Framework.Website.Repositories
                                 Identity = identity,
                                 RouteUrl = identity,
                                 ParentId = identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)
-                                    ? 0
-                                    : GetSingleOrDefault(x => x.Identity == parentIdentity)?.Id ?? 0
+                                    ? String.Empty
+                                    : GetSingleOrDefault(x => x.Identity == parentIdentity)?.Id
                             }, true);
                         }
                     }

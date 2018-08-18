@@ -25,32 +25,32 @@ namespace Zxw.Framework.Website.Repositories
         static SysMenuRepository()
         {
             TinyMapper.Bind<SysMenu, SysMenuViewModel>();
-            //²åÈë³É¹¦ºó´¥·¢
-            Triggers<SysMenu>.Inserted += AfterInsertedAsync;
-            //ÐÞ¸ÄÊ±´¥·¢
-            Triggers<SysMenu>.Updating += WhileUpdatingAsync;
+            //ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ó´¥·ï¿½
+            Triggers<SysMenu>.Inserted += AfterInserted;
+            //ï¿½Þ¸ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+            Triggers<SysMenu>.Updating += WhileUpdating;
         }
         public SysMenuRepository(IDbContextCore dbContext) : base(dbContext)
         {
         }
 
-        public static async void AfterInsertedAsync(IInsertedEntry<SysMenu, DbContext> entry)
+        public static void AfterInserted(IInsertedEntry<SysMenu, DbContext> entry)
         {
             using (var service = AspectCoreContainer.Resolve<ISysMenuRepository>())
             {
-                var parentMenu = await service.GetSingleAsync(entry.Entity.ParentId);
+                var parentMenu = service.GetSingle(entry.Entity.ParentId);
                 entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
                 entry.Entity.SortIndex = entry.Entity.Id;
                 service.Update(entry.Entity, false, "MenuPath", "SortIndex");
-                await DistributedCacheManager.RemoveAsync("Redis_Cache_SysMenu");//²åÈë³É¹¦ºóÇå³ý»º´æÒÔ¸üÐÂ
+                DistributedCacheManager.Remove("Redis_Cache_SysMenu");//ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¸ï¿½ï¿½ï¿½
             }
         }
 
-        public static async void WhileUpdatingAsync(IUpdatingEntry<SysMenu, DbContext> entry)
+        public static void WhileUpdating(IUpdatingEntry<SysMenu, DbContext> entry)
         {
             using (var service = AspectCoreContainer.Resolve<ISysMenuRepository>())
             {
-                var parentMenu = await service.GetSingleAsync(entry.Entity.ParentId);
+                var parentMenu = service.GetSingle(entry.Entity.ParentId);
                 entry.Entity.SortIndex = entry.Entity.Id;
                 entry.Entity.MenuPath = (parentMenu?.MenuPath ?? "0") + "," + entry.Entity.Id;
             }
@@ -69,9 +69,9 @@ namespace Zxw.Framework.Website.Repositories
             return DbContext.Get(where, true).ToList();
         }
         /// <summary>
-        /// ³õÊ¼»¯ÏµÍ³Ä£¿é
+        /// ï¿½ï¿½Ê¼ï¿½ï¿½ÏµÍ³Ä£ï¿½ï¿½
         /// </summary>
-        public async void InitSysMenus(string controllerAssemblyName)
+        public void InitSysMenus(string controllerAssemblyName)
         {
             var assembly = Assembly.Load(controllerAssemblyName);
             var types = assembly?.GetTypes();
@@ -87,7 +87,7 @@ namespace Zxw.Framework.Website.Repositories
                     var parentIdentity = $"{controllerName}";
                     if (Count(m => m.Identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)) == 0)
                     {
-                        await AddAsync(new SysMenu()
+                        Add(new SysMenu()
                         {
                             MenuName = parentIdentity,
                             Activable = true,
@@ -103,7 +103,7 @@ namespace Zxw.Framework.Website.Repositories
                         var identity = $"{controllerName}/{method.Name}";
                         if (Count(m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase)) == 0)
                         {
-                            await AddAsync(new SysMenu()
+                            Add(new SysMenu()
                             {
                                 MenuName = method.Name,
                                 Activable = true,
@@ -123,7 +123,7 @@ namespace Zxw.Framework.Website.Repositories
         private IList<SysMenuViewModel> GetHomeTreeMenu(Expression<Func<SysMenu, bool>> where)
         {
             var reslut = new List<SysMenuViewModel>();
-            var children = Get(where).OrderBy(m => m.SortIndex);
+            var children = Get(where).OrderBy(m => m.SortIndex).ToList();
             foreach (var child in children)
             {
                 var tmp = new SysMenuViewModel();
@@ -137,7 +137,7 @@ namespace Zxw.Framework.Website.Repositories
         private IList<SysMenuViewModel> GetTreeMenu(Expression<Func<SysMenu, bool>> where)
         {
             var reslut = new List<SysMenuViewModel>();
-            var children = Get(where).OrderBy(m => m.SortIndex);
+            var children = Get(where).OrderBy(m => m.SortIndex).ToList();
             foreach (var child in children)
             {
                 var tmp = new SysMenuViewModel();

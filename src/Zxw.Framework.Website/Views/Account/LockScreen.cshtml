@@ -37,22 +37,23 @@
             <a href="https://github.com/VictorTzeng/Zxw.Framework.NetCore" target="_blank"><b>Zxw.Framework.NetCore</b></a>
         </div>
         <!-- User name -->
-        <div class="lockscreen-name">John Doe</div>
+        <div class="lockscreen-name">@User.Identity.Name</div>
 
         <!-- START LOCK SCREEN ITEM -->
         <div class="lockscreen-item">
             <!-- lockscreen image -->
             <div class="lockscreen-image">
-                <img src="~/img/user1-128x128.jpg" alt="User Image">
+                <img src="https://avatars0.githubusercontent.com/u/7413525?s=400&u=eace68b7a452067f171bf43d02da090d8fd33f97&v=4" alt="User Image">
             </div>
             <!-- /.lockscreen-image -->
             <!-- lockscreen credentials (contains the form) -->
-            <form class="lockscreen-credentials">
+            <form class="lockscreen-credentials" role="form" action="@Url.Action("Unlock")" method="post" id="login-form">
+                @Html.AntiForgeryToken()
                 <div class="input-group">
-                    <input type="password" class="form-control" placeholder="password">
+                    <input type="password" class="form-control" placeholder="password" name="password" required/>
 
                     <div class="input-group-btn">
-                        <button type="button" class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
+                        <button type="submit" class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
                     </div>
                 </div>
             </form>
@@ -64,18 +65,43 @@
             Enter your password to retrieve your session
         </div>
         <div class="text-center">
-            <a href="@Url.Action("Login")">Or sign in as a different user</a>
+            <a href="@Url.Action("Index")">Or sign in as a different user</a>
         </div>
         <div class="lockscreen-footer text-center">
-            Copyright &copy; 2014-2016 <b><a href="https://adminlte.io" class="text-black">Almsaeed Studio</a></b><br>
-            All rights reserved
+            Copyright &copy; @DateTime.Now.Year <b><a href="mailto:victor.tzeng@outlook.com" class="text-black">曾祥旺</a></b>&nbsp;All rights reserved.
         </div>
     </div>
     <!-- /.center -->
     <!-- jQuery 3 -->
     <script src="~/components/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/layer/layer.js"></script>
     <!-- Bootstrap 3.3.7 -->
     <script src="~/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- jquery.form.js -->
+<script src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#login-form").ajaxForm({
+            //dataType: "json",
+            //beforeSubmit: function() {
+            //    return true;
+            //},
+            success: function(rep) {
+                if (rep.success == true) {
+                    layer.msg("元气满满，欢迎回来 ~",
+                        function() {
+                            parent.layer.closeAll();
+                        });
+                } else {
+                    layer.alert("密码错误，请重试...", { icon: 5 });
+                }
+            },
+            error: function() {
+                layer.alert("网络开小差啦，请稍候再试", { icon: 5 });
+            }
+        });
+    });
+</script>
 </body>
 </html>
 

@@ -3,17 +3,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Models;
-using Zxw.Framework.NetCore.Options;
+using Zxw.Framework.Website.Controllers.Filters;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
 using Zxw.Framework.Website.ViewModels;
 
 namespace Zxw.Framework.Website.Controllers
 {
+    [ControllerDescription(Name = "菜单管理")]
     public class SysMenuController : BaseController
     {
         private ISysMenuRepository menuRepository;
@@ -24,17 +24,17 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         #region Views
-
+        [ActionDescription(Name = "菜单列表")]
         public IActionResult Index()
         {
             return View();
         }
-
+        [ActionDescription(Name = "新建菜单")]
         public IActionResult Create()
         {
             return View();
         }
-
+        [ActionDescription(Name = "编辑菜单")]
         public IActionResult Edit(string id)
         {
             return View(menuRepository.GetSingle(id));
@@ -44,7 +44,7 @@ namespace Zxw.Framework.Website.Controllers
 
         #region Methods
 
-        [AjaxRequestOnly, HttpGet]
+        [AjaxRequestOnly, HttpGet, ActionDescription(Description = "Ajax获取菜单列表", Name = "获取菜单列表")]
         public Task<IActionResult> GetMenus()
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -54,7 +54,7 @@ namespace Zxw.Framework.Website.Controllers
             });
         }
 
-        [AjaxRequestOnly, HttpGet]
+        [AjaxRequestOnly, HttpGet, ActionDescription(Name = "获取菜单树", Description = "Ajax获取菜单树")]
         public Task<IActionResult> GetTreeMenus(string parentId = null)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -108,7 +108,7 @@ namespace Zxw.Framework.Website.Controllers
             };
         }
 
-        [AjaxRequestOnly, HttpGet]
+        [AjaxRequestOnly, HttpGet, ActionDescription(Name = "获取菜单列表", Description = "Ajax分页获取菜单列表")]
         public Task<IActionResult> GetMenusByPaged(int pageSize, int pageIndex, string keyword)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -127,7 +127,7 @@ namespace Zxw.Framework.Website.Controllers
         /// </summary>
         /// <param name="menu"></param>
         /// <returns></returns>
-        [AjaxRequestOnly,HttpPost,ValidateAntiForgeryToken]
+        [AjaxRequestOnly,HttpPost,ValidateAntiForgeryToken, ActionDescription(Name = "新建菜单", Description = "Ajax新建菜单")]
         public Task<IActionResult> Add(SysMenu menu)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -143,7 +143,7 @@ namespace Zxw.Framework.Website.Controllers
         /// </summary>
         /// <param name="menu"></param>
         /// <returns></returns>
-        [AjaxRequestOnly, HttpPost]
+        [AjaxRequestOnly, HttpPost, ActionDescription(Name = "编辑菜单", Description = "Ajax编辑菜单")]
         public Task<IActionResult> Edit(SysMenu menu)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -159,7 +159,7 @@ namespace Zxw.Framework.Website.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [AjaxRequestOnly]
+        [AjaxRequestOnly, ActionDescription(Name = "删除菜单", Description = "Ajax删除菜单")]
         public Task<IActionResult> Delete(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -174,7 +174,7 @@ namespace Zxw.Framework.Website.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [AjaxRequestOnly]
+        [AjaxRequestOnly, ActionDescription(Name = "启/停用菜单")]
         public Task<IActionResult> Active(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -190,7 +190,7 @@ namespace Zxw.Framework.Website.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [AjaxRequestOnly]
+        [AjaxRequestOnly, ActionDescription(Name = "显示/隐藏菜单")]
         public Task<IActionResult> Visualize(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>

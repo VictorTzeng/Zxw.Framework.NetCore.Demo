@@ -15,7 +15,5 @@ namespace Zxw.Framework.Website.IRepositories
 
         [RedisCache(CacheKey = "Redis_Cache_SysMenu", Expiration = 5)]
         IList<SysMenu> GetMenusByCache(Expression<Func<SysMenu, bool>> where);
-
-        void InitSysMenus(string controllerAssemblyName);
     }
 }

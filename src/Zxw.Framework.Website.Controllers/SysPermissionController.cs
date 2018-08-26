@@ -8,9 +8,11 @@ using Zxw.Framework.NetCore.Attributes;
 using System.Threading.Tasks;
 using Zxw.Framework.NetCore.Models;
 using System.Linq;
+using Zxw.Framework.Website.Controllers.Filters;
 
 namespace Zxw.Framework.Website.Controllers
 {
+    [ControllerDescription(Name = "权限管理")]
     public class SysPermissionController : Controller
     {
         private ISysPermissionRepository SysPermissionRepository;
@@ -22,6 +24,7 @@ namespace Zxw.Framework.Website.Controllers
 
         #region Views
 
+        [ActionDescription(Name = "权限列表")]
         public IActionResult Index()
         {
             return View();
@@ -30,6 +33,7 @@ namespace Zxw.Framework.Website.Controllers
         #endregion
 
         [AjaxRequestOnly, HttpGet]
+        [ActionDescription(Name = "获取权限列表")]
         public Task<IActionResult> GetEntities()
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -40,6 +44,7 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [AjaxRequestOnly]
+        [ActionDescription(Name = "分页获取权限列表")]
         public Task<IActionResult> GetEntitiesByPaged(int pageSize, int pageIndex)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -56,6 +61,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [AjaxRequestOnly,HttpPost,ValidateAntiForgeryToken]
+        [ActionDescription(Name = "新建")]
         public Task<IActionResult> Add(SysPermission model)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -72,6 +78,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [AjaxRequestOnly, HttpPost]
+        [ActionDescription(Name = "编辑")]
         public Task<IActionResult> Edit(SysPermission model)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -88,6 +95,7 @@ namespace Zxw.Framework.Website.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AjaxRequestOnly]
+        [ActionDescription(Name = "删除")]
         public Task<IActionResult> Delete(string id)
         {
             return Task.Factory.StartNew<IActionResult>(() =>

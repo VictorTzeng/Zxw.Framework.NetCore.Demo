@@ -2,13 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
 using EntityFrameworkCore.Triggers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nelibur.ObjectMapper;
-using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Cache;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Helpers;
@@ -86,57 +82,6 @@ namespace Zxw.Framework.Website.Repositories
         public IList<SysMenu> GetMenusByCache(Expression<Func<SysMenu, bool>> @where)
         {
             return DbContext.Get(where, true).ToList();
-        }
-        /// <summary>
-        /// ��ʼ��ϵͳģ��
-        /// </summary>
-        public void InitSysMenus(string controllerAssemblyName)
-        {
-            var assembly = Assembly.Load(controllerAssemblyName);
-            var types = assembly?.GetTypes();
-            var list = types?.Where(t =>t.Name.Contains("Controller") && !t.IsAbstract).ToList();
-            if (list != null)
-            {
-                foreach (var type in list)
-                {
-                    var controllerName = type.Name.Replace("Controller", "");
-                    var methods = type.GetMethods().Where(m =>
-                        m.IsPublic && (m.ReturnType == typeof(IActionResult) ||
-                                       m.ReturnType == typeof(Task<IActionResult>)));
-                    var parentIdentity = $"{controllerName}";
-                    if (Count(m => m.Identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)) == 0)
-                    {
-                        Add(new SysMenu()
-                        {
-                            MenuName = parentIdentity,
-                            Activable = true,
-                            Visiable = true,
-                            Identity = parentIdentity,
-                            RouteUrl = "",
-                            ParentId = String.Empty
-                        }, true);
-                    }
-
-                    foreach (var method in methods)
-                    {
-                        var identity = $"{controllerName}/{method.Name}";
-                        if (Count(m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase)) == 0)
-                        {
-                            Add(new SysMenu()
-                            {
-                                MenuName = method.Name,
-                                Activable = true,
-                                Visiable = method.GetCustomAttribute<AjaxRequestOnlyAttribute>() == null,
-                                Identity = identity,
-                                RouteUrl = identity,
-                                ParentId = identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)
-                                    ? String.Empty
-                                    : GetSingleOrDefault(x => x.Identity == parentIdentity)?.Id
-                            }, true);
-                        }
-                    }
-                }
-            }
         }
 
         private IList<SysMenuViewModel> GetHomeTreeMenu(Expression<Func<SysMenu, bool>> where)

@@ -83,6 +83,12 @@ desired effect
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                             <!-- Menu toggle button -->
+                            <a href="javascript:lockScreen();">
+                                <i class="fa fa-lock" title="Lock Screen"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <!-- Menu toggle button -->
                             <a href="https://github.com/VictorTzeng" target="_blank">
                                 <i class="fa fa-github" title="GitHub"></i>
                             </a>
@@ -182,7 +188,7 @@ desired effect
             <!-- Main content -->
             <section class="content container-fluid" style="padding: 15px 0 0 0;">
                 <div id="tabContainer"></div>
-                <iframe id="tab-content" scrolling="auto" style="overflow-x:hidden; width: 100%; min-height: 100%;border: 0" src="@Url.Action("Default")" onload="initSize();"></iframe>
+                <iframe id="tab-content" scrolling="auto" style="overflow-x:hidden; width: 100%; min-height: 100%;border: 0" src="@Url.Action("About")" onload="initSize();"></iframe>
             </section>
             <!-- /.content -->
         </div>
@@ -194,7 +200,7 @@ desired effect
                 Anything you want
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; @DateTime.Now.Year <a href="#">曾祥旺</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; @DateTime.Now.Year <a href="mailto:victor.tzeng@outlook.com">曾祥旺</a>.</strong> All rights reserved.
         </footer>
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -317,7 +323,16 @@ desired effect
             $("#content-wrapper").height(height-$("#header").height()-$("#footer").height()-35);
             $("#tab-content").height($("#content-wrapper").height()-$("#tabContainer").height()-15);
         }
-
+        function lockScreen() {
+            var index = layer.open({
+                type: 2,
+                content: '@Url.Action("LockScreen","Account")',
+                area: ['100%', '100%'],
+                closeBtn: false,
+                title:'小憩一会儿~'
+            });
+            layer.full(index);
+        }
         $(function () {
             ko.applyBindings(sysMenuModel, $("#sys-menu")[0]);
             sysMenuModel.loadMenus('@Url.Action("GetMenus","SysMenu")');

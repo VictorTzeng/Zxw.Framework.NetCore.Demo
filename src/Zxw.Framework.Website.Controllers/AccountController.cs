@@ -14,6 +14,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.Controllers
 {
+    [ControllerDescription(Name = "登录/注销")]
     public class AccountController:BaseController
     {
         private ISysUserRepository _userRepository;
@@ -24,17 +25,30 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [AllowAnonymous]
+        [ActionDescription(Name = "登录页面")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [ActionDescription(Name = "锁屏")]
         public IActionResult LockScreen()
         {
             return View();
         }
 
-        [ HttpPost, AllowAnonymous, AjaxRequestOnly,ValidateAntiForgeryToken]
+        [HttpPost, AjaxRequestOnly, ValidateAntiForgeryToken]
+        [ActionDescription(Name = "屏幕解锁")]
+        public IActionResult Unlock(string password)
+        {
+            var result = _userRepository.Exist(m =>
+                m.Activable && m.SysUserName.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
+                m.SysPassword.Equals(password));
+            return Json(new {success = result});
+        }
+
+        [ HttpPost, AllowAnonymous, AjaxRequestOnly, ValidateAntiForgeryToken]
+        [ActionDescription(Name = "账号登录")]
         public async Task<IActionResult> SignIn()
         {
             var account = Request.Form["account"][0];
@@ -70,6 +84,7 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [HttpPost, AjaxRequestOnly, ValidateAntiForgeryToken]
+        [ActionDescription(Name = "编辑个人信息")]
         public Task<IActionResult> EditProfile(SysUser user)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -88,6 +103,7 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [HttpPost, AjaxRequestOnly, ValidateAntiForgeryToken]
+        [ActionDescription(Name = "修改密码")]
         public Task<IActionResult> ChangePassword(string userId, string oldPwd, string newPwd)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -98,6 +114,7 @@ namespace Zxw.Framework.Website.Controllers
         }
 
         [HttpPost, AllowAnonymous, AjaxRequestOnly, ValidateAntiForgeryToken]
+        [ActionDescription(Name = "账号注册")]
         public Task<IActionResult> SignUp(SysUser user)
         {
             return Task.Factory.StartNew<IActionResult>(() =>
@@ -113,6 +130,7 @@ namespace Zxw.Framework.Website.Controllers
             });
         }
 
+        [ActionDescription(Name = "注销/退出")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

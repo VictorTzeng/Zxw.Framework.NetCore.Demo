@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System
+@{
     Layout = null;
 }
 
@@ -188,7 +189,7 @@ desired effect
             <!-- Main content -->
             <section class="content container-fluid" style="padding: 15px 0 0 0;">
                 <div id="tabContainer"></div>
-                <iframe id="tab-content" scrolling="auto" style="overflow-x:hidden; width: 100%; min-height: 100%;border: 0" src="@Url.Action("About")" onload="initSize();"></iframe>
+                <iframe id="tab-content" scrolling="auto" style="overflow-x:hidden; width: 100%; min-height: 100%;border: 0" src="@Url.Action("About", "Home")" onload="initSize();"></iframe>
             </section>
             <!-- /.content -->
         </div>

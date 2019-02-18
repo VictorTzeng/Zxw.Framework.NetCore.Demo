@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Zxw.Framework.NetCore" Version="2.0.1" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="2.1.0-preview2-t007bc0fad" />
   </ItemGroup>
 
   <ItemGroup>

@@ -143,7 +143,7 @@ namespace Zxw.Framework.Website
                 {
                     option.Filters.Add(new GlobalExceptionFilter());
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddControllersAsServices();
 
             return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector

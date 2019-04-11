@@ -51,7 +51,7 @@ namespace Zxw.Framework.Website.Repositories
                     }
                 }
                 service.Update(entry.Entity, false, "MenuPath");
-                DistributedCacheManager.Remove("Redis_Cache_SysMenu");//����ɹ�����������Ը���
+                //DistributedCacheManager.Remove("Redis_Cache_SysMenu");//����ɹ�����������Ը���
             }
         }
 

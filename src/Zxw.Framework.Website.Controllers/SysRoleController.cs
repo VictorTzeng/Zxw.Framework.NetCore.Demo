@@ -68,7 +68,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if(!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                SysRoleRepository.AddAsync(model, false);
+                SysRoleRepository.AddAsync(model);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -85,7 +85,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if (!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                SysRoleRepository.Edit(model, false);
+                SysRoleRepository.Edit(model);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -100,7 +100,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                SysRoleRepository.Delete(id, false);
+                SysRoleRepository.Delete(id);
                 return Json(ExcutedResult.SuccessResult("成功删除一条数据。"));
             });
         }

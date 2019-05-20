@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Zxw.Framework.NetCore.DbContextCore;
+using Zxw.Framework.NetCore.IDbContext;
 using Zxw.Framework.NetCore.Repositories;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
@@ -27,7 +28,7 @@ namespace Zxw.Framework.Website.Repositories
                 model.LatestLoginDateTime = DateTime.Now;
                 model.LatestLoginIP = ip;
 
-                Update(model, false, "LatestLoginDateTime", "LatestLoginIP");
+                Update(model, "LatestLoginDateTime", "LatestLoginIP");
                 result = true;
             }
 
@@ -75,7 +76,7 @@ namespace Zxw.Framework.Website.Repositories
 
             if (updateColumns.Any())
             {
-                return Update(entity, false, updateColumns.ToArray()) > 0 ?  (true, "操作成功") : (false, "操作失败");
+                return Update(entity, updateColumns.ToArray()) > 0 ?  (true, "操作成功") : (false, "操作失败");
             }
 
             return (false, "未做任何更改");
@@ -91,7 +92,7 @@ namespace Zxw.Framework.Website.Repositories
             if (!entity.SysPassword.Equals(oldPwd))
                 return (false, "密码错误");
             entity.SysPassword = newPwd;
-            return Update(entity, false, "SysPassword") > 0 ? (true, "操作成功") : (false, "操作失败");
+            return Update(entity, "SysPassword") > 0 ? (true, "操作成功") : (false, "操作失败");
         }
 
         public (bool, string) Active(string userId, bool activable)
@@ -100,7 +101,7 @@ namespace Zxw.Framework.Website.Repositories
             if (entity == null)
                 return (false, "不存在的账户");
             entity.Activable = activable;
-            return Update(entity, false, "SysPassword") > 0 ? (true, "操作成功") : (false, "操作失败");
+            return Update(entity, "SysPassword") > 0 ? (true, "操作成功") : (false, "操作失败");
         }
     }
 }

@@ -134,7 +134,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if(!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                menuRepository.AddAsync(menu, true);
+                menuRepository.AddAsync(menu);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -150,7 +150,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if (!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                menuRepository.Edit(menu, true);
+                menuRepository.Edit(menu);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -181,7 +181,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 var entity = menuRepository.GetSingle(id);
                 entity.Activable = !entity.Activable;
-                menuRepository.Update(entity, false, "Activable");
+                menuRepository.Update(entity, "Activable");
                 return Json(ExcutedResult.SuccessResult(entity.Activable?"OK，已成功启用。":"OK，已成功停用"));
             });
         }
@@ -197,7 +197,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 var entity = menuRepository.GetSingle(id);
                 entity.Visiable = !entity.Visiable;
-                menuRepository.Update(entity, false, "Visiable");
+                menuRepository.Update(entity, "Visiable");
                 return Json(ExcutedResult.SuccessResult("操作成功，请刷新当前网页或者重新进入系统。"));
             });
         }

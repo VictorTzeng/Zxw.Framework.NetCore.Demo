@@ -86,7 +86,7 @@ namespace Zxw.Framework.Website.Controllers
                             Identity = parentIdentity,
                             RouteUrl = "",
                             ParentId = String.Empty
-                        }, true);
+                        });
                     }
 
                     foreach (var method in methods)
@@ -104,7 +104,7 @@ namespace Zxw.Framework.Website.Controllers
                                 ParentId = identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)
                                     ? String.Empty
                                     : menuRepository.GetSingleOrDefault(x => x.Identity == parentIdentity)?.Id
-                            }, true);
+                            });
                         }
                     }
                 }

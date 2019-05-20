@@ -3,11 +3,11 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="Zxw.Framework.NetCore" Version="2.1.0-preview2-t007bc0fad" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="2.1.4.52001-preview2-t007bc0fad" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\components\bootstrap-switch\js\bootstrap-switch.js" />

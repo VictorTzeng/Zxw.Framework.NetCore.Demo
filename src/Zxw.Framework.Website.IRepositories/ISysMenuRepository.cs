@@ -13,7 +13,8 @@ namespace Zxw.Framework.Website.IRepositories
         IList<SysMenuViewModel> GetHomeMenusByTreeView(Expression<Func<SysMenu, bool>> where);
         IList<SysMenuViewModel> GetMenusByTreeView(Expression<Func<SysMenu, bool>> where);
 
-        //[RedisCache(CacheKey = "Redis_Cache_SysMenu", Expiration = 5)]
+        [MemoryCache(CacheKey = "Memory_Cache_SysMenu", Expiration = 5)]
+        [RedisCache(CacheKey = "Redis_Cache_SysMenu", Expiration = 5)]
         IList<SysMenu> GetMenusByCache(Expression<Func<SysMenu, bool>> where);
     }
 }

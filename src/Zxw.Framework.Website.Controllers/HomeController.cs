@@ -14,7 +14,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.Controllers
 {
-    [Ignore, ControllerDescription(Name = "首页")]
+    [ControllerDescription(Name = "首页")]
     public class HomeController : BaseController
     {
         private ISysMenuRepository menuRepository;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Repositories;
 using Zxw.Framework.Website.Models;
@@ -16,5 +17,9 @@ namespace Zxw.Framework.Website.IRepositories
         [MemoryCache(CacheKey = "Memory_Cache_SysMenu", Expiration = 5)]
         [RedisCache(CacheKey = "Redis_Cache_SysMenu", Expiration = 5)]
         IList<SysMenu> GetMenusByCache(Expression<Func<SysMenu, bool>> where);
+
+        [MemoryCache(CacheKey = "Memory_Cache_SysMenuAsync", Expiration = 5)]
+        [RedisCache(CacheKey = "Redis_Cache_SysMenuAsync", Expiration = 5)]
+        Task<IList<SysMenu>> GetMenusByCacheAsync(Expression<Func<SysMenu, bool>> where);
     }
 }

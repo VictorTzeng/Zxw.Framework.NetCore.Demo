@@ -27,6 +27,8 @@ namespace Zxw.Framework.Website.Controllers
         [ActionDescription(Name = "菜单列表")]
         public IActionResult Index()
         {
+            menuRepository.GetMenusByCache(m => true);
+            menuRepository.GetMenusByCacheAsync(m => true);
             return View();
         }
         [ActionDescription(Name = "新建菜单")]

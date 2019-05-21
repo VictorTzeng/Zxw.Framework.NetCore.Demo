@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using Nelibur.ObjectMapper;
-using Zxw.Framework.NetCore.Cache;
-using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Helpers;
 using Zxw.Framework.NetCore.IDbContext;
 using Zxw.Framework.NetCore.IoC;
@@ -38,6 +36,13 @@ namespace Zxw.Framework.Website.Repositories
         public IList<SysMenu> GetMenusByCache(Expression<Func<SysMenu, bool>> @where)
         {
             return DbContext.Get(where, true).ToList();
+        }
+
+        public Task<IList<SysMenu>> GetMenusByCacheAsync(Expression<Func<SysMenu, bool>> @where)
+        {
+            return Task.Factory.StartNew<IList<SysMenu>>(
+                () => AspectCoreContainer.Resolve<IDbContextCore>().Get(where).ToList()
+            );
         }
 
         private IList<SysMenuViewModel> GetHomeTreeMenu(Expression<Func<SysMenu, bool>> where)

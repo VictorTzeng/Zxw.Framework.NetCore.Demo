@@ -30,6 +30,11 @@ namespace Zxw.Framework.Website.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
+        public IActionResult Default()
+        {
+            return View();
+        }
 
         [ActionDescription(Name = "项目简介")]
         public IActionResult About()

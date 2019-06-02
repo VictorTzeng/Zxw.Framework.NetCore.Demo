@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -51,9 +52,45 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var rows = menuRepository.GetHomeMenusByTreeView(m=>m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId)).OrderBy(m=>m.SortIndex).ToList();
+                var rows = menuRepository
+                    .GetHomeMenusByTreeView(m => m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId))
+                    .OrderBy(m => m.SortIndex).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
             });
+        }
+        [AjaxRequestOnly, HttpGet, ActionDescription(Description = "Ajax获取菜单列表", Name = "获取菜单列表")]
+        public Task<IActionResult> GetVueMenus()
+        {
+            return Task.Factory.StartNew<IActionResult>(() =>
+            {
+                var rows = menuRepository
+                    .GetHomeMenusByTreeView(m => m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId))
+                    .OrderBy(m => m.SortIndex).Select(ToJsonViewModel).ToList();
+                return Json(ExcutedResult.SuccessResult(rows));
+            });
+        }
+
+        private SysMenuJsonViewModel ToJsonViewModel(SysMenuViewModel model)
+        {
+            if (model == null) return null;
+            var json = new SysMenuJsonViewModel()
+            {
+                icon = model.MenuIcon,
+                index = model.Id,
+                route = model.RouteUrl,
+                title = model.MenuName,
+                items = null
+            };
+            if (model.Children != null && model.Children.Any())
+            {
+                json.items = new List<SysMenuJsonViewModel>();
+                foreach (var child in model.Children)
+                {
+                    json.items.Add(ToJsonViewModel(child));
+                }
+            }
+
+            return json;
         }
 
         [AjaxRequestOnly, HttpGet, ActionDescription(Name = "获取菜单树", Description = "Ajax获取菜单树")]

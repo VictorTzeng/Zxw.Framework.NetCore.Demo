@@ -45,7 +45,7 @@ namespace Zxw.Framework.Website.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous,Ignore]
         [ActionDescription(Name = "初始化菜单")]
         public IActionResult Init([FromServices]IOptions<CodeGenerateOption> options)
         {

@@ -77,7 +77,7 @@ namespace Zxw.Framework.Website
         private IServiceProvider InitIoC(IServiceCollection services)
         {
             //database connectionstring
-            var dbConnectionString = Configuration.GetConnectionString("PostgreSQL");
+            var dbConnectionString = Configuration.GetConnectionString("MsSqlServer");
 
             #region Redis
 
@@ -124,7 +124,8 @@ namespace Zxw.Framework.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
+                //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
+                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             
             #endregion

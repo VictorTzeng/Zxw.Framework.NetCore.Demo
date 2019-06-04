@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="Vue" unicode="&#59289;" d="M615.6 772.4h165.5L512 306.29999999999995 242.9 772.4H63.5L512-4.399999999999977l448.5 776.9zM781.1 772.4H615.6L512 593 408.4 772.4H242.9L512 306.29999999999995z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

@@ -15,6 +15,7 @@ using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.NetCore.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Zxw.Framework.NetCore.IDbContext;
 
 namespace Zxw.Framework.Website
 {
@@ -76,17 +77,13 @@ namespace Zxw.Framework.Website
         private IServiceProvider InitIoC(IServiceCollection services)
         {
             //database connectionstring
-            var dbConnectionString = Configuration.GetConnectionString("PostgreSQL");
+            var dbConnectionString = Configuration.GetConnectionString("MsSqlServer");
 
             #region Redis
 
             var redisConnectionString = Configuration.GetConnectionString("Redis");
             //启用Redis
-            services.AddDistributedRedisCache(option =>
-            {
-                option.Configuration = redisConnectionString;//redis连接字符串
-                option.InstanceName = "sample";//Redis实例名称
-            });
+            services.UseCsRedisClient(redisConnectionString);
             //全局设置Redis缓存有效时间为5分钟。
             //services.Configure<DistributedCacheEntryOptions>(option =>
             //    option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));
@@ -127,8 +124,9 @@ namespace Zxw.Framework.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddTransient<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
-                .AddTransientAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
+                //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
+                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             
             #endregion
 
@@ -143,7 +141,7 @@ namespace Zxw.Framework.Website
                 {
                     option.Filters.Add(new GlobalExceptionFilter());
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddControllersAsServices();
 
             return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector

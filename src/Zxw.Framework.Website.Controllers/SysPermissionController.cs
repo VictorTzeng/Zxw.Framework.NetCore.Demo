@@ -68,7 +68,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if(!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                SysPermissionRepository.AddAsync(model, false);
+                SysPermissionRepository.AddAsync(model);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -85,7 +85,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if (!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                SysPermissionRepository.Edit(model, false);
+                SysPermissionRepository.Edit(model);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -100,7 +100,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                SysPermissionRepository.Delete(id, false);
+                SysPermissionRepository.Delete(id);
                 return Json(ExcutedResult.SuccessResult("成功删除一条数据。"));
             });
         }

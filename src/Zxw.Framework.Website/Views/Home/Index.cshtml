@@ -22,6 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Ionicons -->
     <link rel="stylesheet" href="~/components/Ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="~/components/bootstrap-tab/css/bootstrap-tab.css" />
+    <link rel="stylesheet" href="~/lib/iconfont/iconfont.css"/>
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -94,19 +95,25 @@ desired effect
                                 <i class="fa fa-github" title="GitHub"></i>
                             </a>
                         </li>
+                        <li>
+                            <!-- Menu toggle button -->
+                            <a href="@Url.Action("Default")" target="_blank">
+                                <i class="iconfont icon-Vue" title="Element UI"></i>
+                            </a>
+                        </li>
                         <!-- User Account Menu -->
                         <li class="dropdown user user-menu">
                             <!-- Menu Toggle Button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <!-- The user image in the navbar-->
-                                <img src="https://avatars0.githubusercontent.com/u/7413525?s=400&u=eace68b7a452067f171bf43d02da090d8fd33f97&v=4" class="user-image" alt="User Image" asp-append-version="true"/>
+                                <img src="https://avatars0.githubusercontent.com/u/7413525?s=400&u=eace68b7a452067f171bf43d02da090d8fd33f97&v=4" class="user-image" alt="User Image" asp-append-version="true" />
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                 <span class="hidden-xs">@User.Identity.Name</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
-                                    <img src="https://avatars0.githubusercontent.com/u/7413525?s=400&u=eace68b7a452067f171bf43d02da090d8fd33f97&v=4" class="img-circle" alt="User Image" asp-append-version="true"/>
+                                    <img src="https://avatars0.githubusercontent.com/u/7413525?s=400&u=eace68b7a452067f171bf43d02da090d8fd33f97&v=4" class="img-circle" alt="User Image" asp-append-version="true" />
                                     <p>
                                         Victor Tzeng - Web Developer
                                         <small>Member since Nov. 2012</small>

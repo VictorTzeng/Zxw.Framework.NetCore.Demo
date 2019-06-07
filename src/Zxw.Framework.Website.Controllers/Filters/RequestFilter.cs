@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Extensions;
+using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.Website.IRepositories;
 
 namespace Zxw.Framework.Website.Controllers.Filters
@@ -18,7 +19,7 @@ namespace Zxw.Framework.Website.Controllers.Filters
             if (!context.Filters.Contains(new IgnoreAttribute()))
             {
                 var repository =
-                    (ISysMenuRepository) context.HttpContext.RequestServices.GetService(typeof(ISysMenuRepository));
+                    AspectCoreContainer.Resolve<ISysMenuRepository>();
                 if (repository.Count(
                         m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase) && m.Activable) <= 0)
                 {

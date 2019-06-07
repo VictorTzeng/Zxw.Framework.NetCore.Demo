@@ -14,7 +14,7 @@ using Zxw.Framework.Website.Models;
 
 namespace Zxw.Framework.Website.Controllers
 {
-    [Ignore, ControllerDescription(Name = "首页")]
+    [ControllerDescription(Name = "首页")]
     public class HomeController : BaseController
     {
         private ISysMenuRepository menuRepository;
@@ -30,6 +30,11 @@ namespace Zxw.Framework.Website.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
+        public IActionResult Default()
+        {
+            return View();
+        }
 
         [ActionDescription(Name = "项目简介")]
         public IActionResult About()
@@ -40,7 +45,7 @@ namespace Zxw.Framework.Website.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous,Ignore]
         [ActionDescription(Name = "初始化菜单")]
         public IActionResult Init([FromServices]IOptions<CodeGenerateOption> options)
         {
@@ -86,7 +91,7 @@ namespace Zxw.Framework.Website.Controllers
                             Identity = parentIdentity,
                             RouteUrl = "",
                             ParentId = String.Empty
-                        }, true);
+                        });
                     }
 
                     foreach (var method in methods)
@@ -104,7 +109,7 @@ namespace Zxw.Framework.Website.Controllers
                                 ParentId = identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)
                                     ? String.Empty
                                     : menuRepository.GetSingleOrDefault(x => x.Identity == parentIdentity)?.Id
-                            }, true);
+                            });
                         }
                     }
                 }

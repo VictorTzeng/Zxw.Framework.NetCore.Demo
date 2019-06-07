@@ -1,17 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="TinyMapper" Version="3.0.2-beta" />
-    <PackageReference Include="Zxw.Framework.NetCore" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Zxw.Framework.Website.IRepositories\Zxw.Framework.Website.IRepositories.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.Models\Zxw.Framework.Website.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Zxw.Framework.NetCore">
+      <HintPath>C:\Users\victo\.nuget\packages\zxw.framework.netcore\2.1.4.52101-preview2-t007bc0fad\lib\netstandard2.0\Zxw.Framework.NetCore.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

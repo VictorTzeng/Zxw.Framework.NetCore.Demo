@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace Zxw.Framework.Website.Controllers
         [ActionDescription(Name = "菜单列表")]
         public IActionResult Index()
         {
+            menuRepository.GetMenusByCache(m => true);
+            menuRepository.GetMenusByCacheAsync(m => true);
             return View();
         }
         [ActionDescription(Name = "新建菜单")]
@@ -49,9 +52,45 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var rows = menuRepository.GetHomeMenusByTreeView(m=>m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId)).OrderBy(m=>m.SortIndex).ToList();
+                var rows = menuRepository
+                    .GetHomeMenusByTreeView(m => m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId))
+                    .OrderBy(m => m.SortIndex).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
             });
+        }
+        [AjaxRequestOnly, HttpGet, ActionDescription(Description = "Ajax获取菜单列表", Name = "获取菜单列表")]
+        public Task<IActionResult> GetVueMenus()
+        {
+            return Task.Factory.StartNew<IActionResult>(() =>
+            {
+                var rows = menuRepository
+                    .GetHomeMenusByTreeView(m => m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId))
+                    .OrderBy(m => m.SortIndex).Select(ToJsonViewModel).ToList();
+                return Json(ExcutedResult.SuccessResult(rows));
+            });
+        }
+
+        private SysMenuJsonViewModel ToJsonViewModel(SysMenuViewModel model)
+        {
+            if (model == null) return null;
+            var json = new SysMenuJsonViewModel()
+            {
+                icon = model.MenuIcon,
+                index = model.Id,
+                route = model.RouteUrl,
+                title = model.MenuName,
+                items = null
+            };
+            if (model.Children != null && model.Children.Any())
+            {
+                json.items = new List<SysMenuJsonViewModel>();
+                foreach (var child in model.Children)
+                {
+                    json.items.Add(ToJsonViewModel(child));
+                }
+            }
+
+            return json;
         }
 
         [AjaxRequestOnly, HttpGet, ActionDescription(Name = "获取菜单树", Description = "Ajax获取菜单树")]
@@ -134,7 +173,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if(!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                menuRepository.AddAsync(menu, true);
+                menuRepository.AddAsync(menu);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -150,7 +189,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if (!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
-                menuRepository.Edit(menu, true);
+                menuRepository.Edit(menu);
                 return Json(ExcutedResult.SuccessResult());
             });
         }
@@ -181,7 +220,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 var entity = menuRepository.GetSingle(id);
                 entity.Activable = !entity.Activable;
-                menuRepository.Update(entity, false, "Activable");
+                menuRepository.Update(entity, "Activable");
                 return Json(ExcutedResult.SuccessResult(entity.Activable?"OK，已成功启用。":"OK，已成功停用"));
             });
         }
@@ -197,7 +236,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 var entity = menuRepository.GetSingle(id);
                 entity.Visiable = !entity.Visiable;
-                menuRepository.Update(entity, false, "Visiable");
+                menuRepository.Update(entity, "Visiable");
                 return Json(ExcutedResult.SuccessResult("操作成功，请刷新当前网页或者重新进入系统。"));
             });
         }

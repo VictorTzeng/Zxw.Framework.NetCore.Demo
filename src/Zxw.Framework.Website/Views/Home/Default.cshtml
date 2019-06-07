@@ -1,0 +1,192 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Element UI</title>
+    
+    <link rel="stylesheet" href="~/lib/element-ui/index.css" />
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style type="text/css">
+        .el-tabs__header {
+            margin: 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" style="height: 100%;">
+        <el-container style="height: 100%;">
+            <el-header style="background-color: #3c8dbc;line-height: 60px;" id="header">
+                <el-row>
+                    <a v-on:click="collapseMenu" href="javascript:void(0);">
+                        <i class="fa-2x" style="color: white;" v-bind:class="btnCollapseClass"></i>
+                    </a>
+                </el-row>
+            </el-header>
+            <el-container id="right">
+                <el-aside style="height: 100%; background-color: #222d32" id="left" width="auto">
+                    <el-menu default-active="1"
+                             @@open="handleOpen"
+                             @@close="handleClose"
+                             text-color="#fff"
+                             background-color="#222d32"
+                             active-text-color="#ffd04b"
+                             :collapse="isCollapse" id="menu">
+                        <el-menu-item index="1" id="1">
+                            <i class="fa fa-home"></i>
+                            <span slot="title">首页</span>
+                        </el-menu-item>
+                        <menu-tree v-for="item in menus" :key="item.index" :menu="item"></menu-tree>
+                    </el-menu>
+                </el-aside>
+                <el-main style="padding: 5px 0 0 5px;" id="main">
+                    <el-tabs v-model="clickedTabName" type="card" @@tab-remove="removeTab">
+                        <el-tab-pane v-for="(item, index) in openTabs"
+                                     :key="item.name"
+                                     :label="item.title"
+                                     :name="item.name"
+                                     :closable="item.closable">
+                            <iframe :id="item.name" scrolling="auto" style="overflow-x:hidden; width: 100%; min-height: 100%;border: 0" :src="item.content" v-on:load="initSize"></iframe>
+
+                        </el-tab-pane>
+                    </el-tabs>
+                </el-main>
+            </el-container>
+        </el-container>
+    </div>
+    <template id="tmpl-menu-item">
+        <el-submenu v-if="menu.items && menu.items.length >= 1" :index="menu.index">
+            <template slot="title">
+                <i :class="menu.icon"></i>
+                <span slot="title">{{menu.title}}</span>
+            </template>
+            <menu-tree v-for="item in menu.items" :key="item.index" :menu="item"></menu-tree>
+        </el-submenu>
+        <el-menu-item v-else :index="menu.index" :route="menu.route" @@click="handleRoute(menu)" :id="menu.index">
+            <i :class="menu.icon"></i>
+            <span slot="title">{{menu.title}}</span>
+        </el-menu-item>
+    </template>
+
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="~/lib/element-ui/vue.js"></script>
+<script type="text/javascript" src="~/lib/element-ui/index.js"></script>
+<script type="text/javascript" src="~/lib/layer/layer.js"></script>
+<script type="text/javascript">
+    Vue.component('MenuTree',
+        {
+            name: "MenuTree",
+            props: {
+                menu: {
+                    type: Object,
+                    required: true
+                }
+            },
+            template: '#tmpl-menu-item',
+            methods: {
+                handleRoute (menu) {
+                    // 通过菜单URL跳转至指定路由
+                    app.addTab({
+                        name: menu.index,
+                        title: menu.title,
+                        url: menu.route
+                    });
+                }
+            }
+        });
+    var app = new Vue({
+        el: "#app",
+        data: {
+            isCollapse: false,
+            btnCollapseClass:'el-icon-s-fold',
+            menus:[],
+            clickedTabName: '1',
+            openTabs: [{
+                title: '首页',
+                name: '1',
+                content: '@Url.Action("About", "Home")',
+                closable:false
+            }]
+        },
+        watch: {
+            isCollapse(val) {
+                if (val) {
+                    this.btnCollapseClass = "el-icon-s-unfold";
+                } else {
+                    this.btnCollapseClass = "el-icon-s-fold";
+                }
+            },
+            clickedTabName(val) {
+                $("li.is-active").removeClass("is-active").css({"color":"#FFF"});
+                $("#" + val).addClass("is-active").css({ "color":"rgb(255, 208, 75)"});
+            }
+        },
+        methods: {
+            collapseMenu: function() {
+                this.isCollapse = !this.isCollapse;
+            },
+            loadMenus:function() {
+                var self = this;
+                $.get('@Url.Action("GetVueMenus", "SysMenu")',
+                    function(data) {
+                        if (data.success) {
+                            self.menus = data.rows;
+                        } else {
+                            layer.alert("菜单请求失败：" + data, msg);
+                        }
+                    });
+            },
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            addTab(tab) {
+                if (this.openTabs.filter(x => x.name === tab.name).length===0) {
+                    this.openTabs.push({
+                        title: tab.title,
+                        name: tab.name,
+                        content: tab.url,
+                        closable: true
+                    });
+                }
+                this.clickedTabName = tab.name;
+            },
+            removeTab(targetName) {
+                let tabs = this.openTabs;
+                let activeName = this.clickedTabName;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+        
+                this.clickedTabName = activeName;
+                this.openTabs = tabs.filter(tab => tab.name !== targetName);
+            },
+            initSize() {
+                var height = $(window).height();
+                $("body, #app").height(height);
+                $("iframe").height(
+                    $("#main").height() - $(".el-tabs__header").height()-10);
+            }
+        }
+    });
+    window.onresize = app.initSize();
+    $(function() {
+        $("#app").height($(window).height());
+        app.loadMenus();
+    });
+</script>
+</body>
+</html>

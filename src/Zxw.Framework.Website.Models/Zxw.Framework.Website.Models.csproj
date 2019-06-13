@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Zxw.Framework.NetCore" Version="2.1.4.53001-preview2-t007bc0fad" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="2.1.4.60501-rtm-1" />
   </ItemGroup>
 
   <ItemGroup>

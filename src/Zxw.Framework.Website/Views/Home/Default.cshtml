@@ -15,6 +15,15 @@
         .el-tabs__header {
             margin: 0 !important;
         }
+        .width-auto {
+            width: auto !important;
+        }
+        .width-200 {
+            width: 200px !important;
+        }
+        .el-menu {
+            border-right: none !important;
+        }
     </style>
 </head>
 <body>
@@ -27,8 +36,8 @@
                     </a>
                 </el-row>
             </el-header>
-            <el-container id="right">
-                <el-aside style="height: 100%; background-color: #222d32" id="left" width="auto">
+            <el-container>
+                <el-aside style="height: 100%; background-color: #222d32;" id="left" v-bind:class="asideWidth">
                     <el-menu default-active="1"
                              @@open="handleOpen"
                              @@close="handleClose"
@@ -36,7 +45,7 @@
                              background-color="#222d32"
                              active-text-color="#ffd04b"
                              :collapse="isCollapse" id="menu">
-                        <el-menu-item index="1" id="1">
+                        <el-menu-item index="1" route='@Url.Action("About", "Home")' id="1">
                             <i class="fa fa-home"></i>
                             <span slot="title">首页</span>
                         </el-menu-item>
@@ -102,6 +111,7 @@
         el: "#app",
         data: {
             isCollapse: false,
+            asideWidth:"width-200",
             btnCollapseClass:'el-icon-s-fold',
             menus:[],
             clickedTabName: '1',
@@ -116,8 +126,10 @@
             isCollapse(val) {
                 if (val) {
                     this.btnCollapseClass = "el-icon-s-unfold";
+                    this.asideWidth = "width-auto";
                 } else {
                     this.btnCollapseClass = "el-icon-s-fold";
+                    this.asideWidth = "width-200";
                 }
             },
             clickedTabName(val) {

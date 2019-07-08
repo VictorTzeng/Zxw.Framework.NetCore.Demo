@@ -125,7 +125,7 @@ namespace Zxw.Framework.Website
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
                 //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
-                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddDbContext<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             
             #endregion

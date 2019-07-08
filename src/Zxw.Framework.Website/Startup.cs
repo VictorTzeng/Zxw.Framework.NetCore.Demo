@@ -81,9 +81,9 @@ namespace Zxw.Framework.Website
 
             #region Redis
 
-            var redisConnectionString = Configuration.GetConnectionString("Redis");
-            //启用Redis
-            services.UseCsRedisClient(redisConnectionString);
+            //var redisConnectionString = Configuration.GetConnectionString("Redis");
+            ////启用Redis
+            //services.UseCsRedisClient(redisConnectionString);
             //全局设置Redis缓存有效时间为5分钟。
             //services.Configure<DistributedCacheEntryOptions>(option =>
             //    option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));

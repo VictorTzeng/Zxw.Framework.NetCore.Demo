@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Zxw.Framework.NetCore" Version="2.1.4.61101-rtm-1" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="2.2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Zxw.Framework.NetCore">
-      <HintPath>C:\Users\victo\.nuget\packages\zxw.framework.netcore\2.1.4.52101-preview2-t007bc0fad\lib\netstandard2.0\Zxw.Framework.NetCore.dll</HintPath>
+    <Reference Include="Microsoft.EntityFrameworkCore">
+      <HintPath>C:\Users\victo\.nuget\packages\microsoft.entityframeworkcore\2.2.4\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
     </Reference>
   </ItemGroup>
 

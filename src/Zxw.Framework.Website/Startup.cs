@@ -15,6 +15,7 @@ using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.NetCore.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Zxw.Framework.NetCore.Cache;
 using Zxw.Framework.NetCore.IDbContext;
 
 namespace Zxw.Framework.Website
@@ -93,7 +94,7 @@ namespace Zxw.Framework.Website
             #region MemoryCache
 
             //启用MemoryCache
-            services.AddMemoryCache();
+            //services.AddMemoryCache();
 
             #endregion
 

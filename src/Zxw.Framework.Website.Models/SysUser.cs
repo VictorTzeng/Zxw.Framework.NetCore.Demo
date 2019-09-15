@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Models;
 
 namespace Zxw.Framework.Website.Models
 {
+    [DbContext(typeof(SqlServerDbContext))]
     [Table("SysUser"), Serializable]
     public class SysUser:BaseModel<string>
     {

@@ -82,9 +82,9 @@ namespace Zxw.Framework.Website
 
             #region Redis
 
-            var redisConnectionString = Configuration.GetConnectionString("Redis");
-            //启用Redis
-            services.UseCsRedisClient(redisConnectionString);
+            //var redisConnectionString = Configuration.GetConnectionString("Redis");
+            ////启用Redis
+            //services.UseCsRedisClient(redisConnectionString);
             //全局设置Redis缓存有效时间为5分钟。
             //services.Configure<DistributedCacheEntryOptions>(option =>
             //    option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));
@@ -126,7 +126,7 @@ namespace Zxw.Framework.Website
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
                 //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
-                .AddScoped<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddDbContext<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
             
             #endregion

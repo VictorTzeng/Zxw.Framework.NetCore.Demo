@@ -13,6 +13,10 @@ namespace Zxw.Framework.Website
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(config =>
+                {
+                    config.ListenAnyIP(5000);
+                })
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     // Configure the app here.

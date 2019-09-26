@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Models;
 
 namespace Zxw.Framework.Website.Models
 {
+    [Serializable]
     [DbContext(typeof(SqlServerDbContext))]
     [Table("SysMenu")]
     public class SysMenu:BaseModel<string>

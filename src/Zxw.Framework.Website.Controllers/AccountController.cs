@@ -69,6 +69,7 @@ namespace Zxw.Framework.Website.Controllers
                 var user = new ClaimsPrincipal(
                     new ClaimsIdentity(new[]
                         {
+                            new Claim(ClaimTypes.Sid, result.Item2.Id),
                             new Claim(ClaimTypes.Name, result.Item2.SysUserName),
                         },
                         CookieAuthenticationDefaults.AuthenticationScheme));

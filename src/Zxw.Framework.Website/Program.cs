@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Zxw.Framework.Website
 {
@@ -10,18 +11,22 @@ namespace Zxw.Framework.Website
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(config =>
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    config.ListenAnyIP(5000);
+                    webBuilder.UseKestrel(config =>
+                    {
+                        config.ListenAnyIP(80);
+                    })
+                    .ConfigureAppConfiguration((context, config) =>
+                    {
+                        // Configure the app here.
+                    })
+                    .UseStartup<Startup>();
                 })
-                .ConfigureAppConfiguration((context, config) =>
-                {
-                    // Configure the app here.
-                })
-                .UseStartup<Startup>();
+                ;
         }
     }
 }

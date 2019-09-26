@@ -13,6 +13,7 @@ namespace Zxw.Framework.Website.Models
     {
         [Key]
         [Column("SysUserId")]
+        [MaxLength(36)]
         public override string Id { get; set; }
 
         [Required]
@@ -30,7 +31,7 @@ namespace Zxw.Framework.Website.Models
         public string SysPassword { get; set; }
 
         [Required]
-        public bool Activable { get; set; } = true;
+        public bool Active{get;set;}=true;
 
         public DateTime CreatedDateTime{get;set;}=DateTime.Now;
 

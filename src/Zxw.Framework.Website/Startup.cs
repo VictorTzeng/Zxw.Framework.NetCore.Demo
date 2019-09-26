@@ -45,10 +45,10 @@ namespace Zxw.Framework.Website
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -58,16 +58,18 @@ namespace Zxw.Framework.Website
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection()
-                .UseStaticFiles()
-                .UseCookiePolicy()
-                .UseAuthentication()
-                .UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
-                });
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseCors();
+
+            app.UseAuthentication();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
         }
         /// <summary>
         /// IoC初始化
@@ -127,7 +129,7 @@ namespace Zxw.Framework.Website
                 //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
                 .AddDbContext<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//注入仓储
-            
+
             #endregion
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -137,11 +139,13 @@ namespace Zxw.Framework.Website
                     options.LogoutPath = "/Account/Logout";
                 });
             services.AddOptions();
+            services.AddHttpContextAccessor();
+            services.AddControllersWithViews();
             services.AddMvc(option =>
                 {
                     option.Filters.Add(new GlobalExceptionFilter());
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
             return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector

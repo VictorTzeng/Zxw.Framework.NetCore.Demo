@@ -42,7 +42,7 @@ namespace Zxw.Framework.Website.Controllers
         public IActionResult Unlock(string password)
         {
             var result = _userRepository.Exist(m =>
-                m.Activable && m.SysUserName.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
+                m.Active && m.SysUserName.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
                 m.SysPassword.Equals(password));
             return Json(new {success = result});
         }
@@ -60,7 +60,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 msg = "对不起，您输入的用户名或者密码错误";
             }
-            else if (!result.Item2.Activable)
+            else if (!result.Item2.Active)
             {
                 msg = "对不起，该账号已停用";
             }

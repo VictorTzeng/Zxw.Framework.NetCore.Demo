@@ -53,7 +53,7 @@ namespace Zxw.Framework.Website.Controllers
             return Task.Factory.StartNew<IActionResult>(() =>
             {
                 var rows = menuRepository
-                    .GetHomeMenusByTreeView(m => m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId))
+                    .GetHomeMenusByTreeView(m => m.Active && m.Visible && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
             });
@@ -64,7 +64,7 @@ namespace Zxw.Framework.Website.Controllers
             return Task.Factory.StartNew<IActionResult>(() =>
             {
                 var rows = menuRepository
-                    .GetHomeMenusByTreeView(m => m.Activable && m.Visiable && string.IsNullOrEmpty(m.ParentId))
+                    .GetHomeMenusByTreeView(m => m.Active && m.Visible && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).Select(ToJsonViewModel).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
             });
@@ -98,7 +98,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var nodes = menuRepository.GetMenusByTreeView(m => m.Activable && string.IsNullOrEmpty(m.ParentId))
+                var nodes = menuRepository.GetMenusByTreeView(m => m.Active && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).Select(m => GetTreeMenus(m, parentId)).ToList();
                 var rows = new[]
                 {
@@ -219,9 +219,9 @@ namespace Zxw.Framework.Website.Controllers
             return Task.Factory.StartNew<IActionResult>(() =>
             {
                 var entity = menuRepository.GetSingle(id);
-                entity.Activable = !entity.Activable;
-                menuRepository.Update(entity, "Activable");
-                return Json(ExcutedResult.SuccessResult(entity.Activable?"OK，已成功启用。":"OK，已成功停用"));
+                entity.Active = !entity.Active;
+                menuRepository.Update(entity, "Active");
+                return Json(ExcutedResult.SuccessResult(entity.Active?"OK，已成功启用。":"OK，已成功停用"));
             });
         }
         /// <summary>
@@ -235,8 +235,8 @@ namespace Zxw.Framework.Website.Controllers
             return Task.Factory.StartNew<IActionResult>(() =>
             {
                 var entity = menuRepository.GetSingle(id);
-                entity.Visiable = !entity.Visiable;
-                menuRepository.Update(entity, "Visiable");
+                entity.Visible = !entity.Visible;
+                menuRepository.Update(entity, "Visible");
                 return Json(ExcutedResult.SuccessResult("操作成功，请刷新当前网页或者重新进入系统。"));
             });
         }

@@ -106,12 +106,12 @@
                     <label>启/停用：</label>
                     <label class="container pull-right">
                         启用
-                        <input type="radio" @(Model.Activable ? "checked" : "") name="Activable" value="True" />
+                        <input type="radio" @(Model.Active ? "checked" : "") name="Active" value="True" />
                         <span class="checkmark"></span>
                     </label>
                     <label class="container pull-right">
                         停用
-                        <input type="radio" name="Activable" value="False" @(Model.Activable ? "" : "checked") />
+                        <input type="radio" name="Active" value="False" @(Model.Active ? "" : "checked") />
                         <span class="checkmark"></span>
                     </label>
                 </div>
@@ -119,12 +119,12 @@
                     <label>显示/隐藏：</label>
                     <label class="container pull-right">
                         显示
-                        <input type="radio" @(Model.Visiable ? "checked" : "") name="Visiable" value="True" />
+                        <input type="radio" @(Model.Visible ? "checked" : "") name="Visible" value="True" />
                         <span class="checkmark"></span>
                     </label>
                     <label class="container pull-right">
                         隐藏
-                        <input type="radio" name="Visiable" value="False" @(Model.Visiable ? "" : "checked") />
+                        <input type="radio" name="Visible" value="False" @(Model.Visible ? "" : "checked") />
                         <span class="checkmark"></span>
                     </label>
                 </div>

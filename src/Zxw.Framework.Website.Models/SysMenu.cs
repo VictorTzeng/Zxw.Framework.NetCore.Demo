@@ -13,11 +13,13 @@ namespace Zxw.Framework.Website.Models
     {
         [Key]
         [Column("SysMenuId")]
+        [MaxLength(36)]
         public override string Id { get; set; }
 
+        [MaxLength(255)]
         public string ParentId { get; set; } = String.Empty;
 
-        [MaxLength(2000)]
+        [MaxLength(255)]
         public string MenuPath { get; set; }
 
         [Required]
@@ -35,9 +37,9 @@ namespace Zxw.Framework.Website.Models
         [MaxLength(200)]
         public string RouteUrl { get; set; }
 
-        public bool Visiable { get; set; } = true;
+        public bool Visible { get; set; } = true;
 
-        public bool Activable { get; set; } = true;
+        public bool Active { get; set; } = true;
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SortIndex { get; set; }

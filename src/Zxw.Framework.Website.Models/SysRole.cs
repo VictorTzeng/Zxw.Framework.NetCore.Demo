@@ -15,6 +15,7 @@ namespace Zxw.Framework.Website.Models
     {
         [Key]
         [Column("SysRoleId")]
+        [MaxLength(36)]
         public override string Id { get; set; }
 
         [Required]
@@ -23,9 +24,10 @@ namespace Zxw.Framework.Website.Models
 
         public int ParentId{get;set;}
 
+        [MaxLength(255)]
         public string NodePath{get;set;}
 
-        public bool Activable{get;set;}=true;
+        public bool Active{get;set;}=true;
 
         public DateTime CreatedDateTime{get;set;}
     }

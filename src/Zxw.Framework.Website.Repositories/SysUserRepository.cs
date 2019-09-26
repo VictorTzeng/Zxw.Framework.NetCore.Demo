@@ -23,7 +23,7 @@ namespace Zxw.Framework.Website.Repositories
                  || m.Telephone.Equals(account)
                  || m.EMail.Equals(account, StringComparison.OrdinalIgnoreCase))
                 && password.Equals(m.SysPassword));
-            if (model != null && model.Activable)
+            if (model != null && model.Active)
             {
                 model.LatestLoginDateTime = DateTime.Now;
                 model.LatestLoginIP = ip;
@@ -44,7 +44,7 @@ namespace Zxw.Framework.Website.Repositories
                 SysPassword = password,
                 CreatedDateTime = DateTime.Now,
                 EMail = email,
-                Activable = true                
+                Active = true                
             };
             return Add(model) > 0;
         }
@@ -54,7 +54,7 @@ namespace Zxw.Framework.Website.Repositories
             var entity = GetSingle(userId);
             if (entity == null)
                 return (false,"不存在的账户");
-            if (!entity.Activable)
+            if (!entity.Active)
                 return (false,"该账户已被停用");
             var updateColumns = new List<string>();
             if (!string.IsNullOrEmpty(telephone))
@@ -87,7 +87,7 @@ namespace Zxw.Framework.Website.Repositories
             var entity = GetSingle(userId);
             if (entity == null)
                 return (false, "不存在的账户");
-            if (!entity.Activable)
+            if (!entity.Active)
                 return (false, "该账户已被停用");
             if (!entity.SysPassword.Equals(oldPwd))
                 return (false, "密码错误");
@@ -100,7 +100,7 @@ namespace Zxw.Framework.Website.Repositories
             var entity = GetSingle(userId);
             if (entity == null)
                 return (false, "不存在的账户");
-            entity.Activable = activable;
+            entity.Active = activable;
             return Update(entity, "SysPassword") > 0 ? (true, "操作成功") : (false, "操作失败");
         }
     }

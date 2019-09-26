@@ -54,7 +54,7 @@ namespace Zxw.Framework.Website.Repositories
                 var tmp = new SysMenuViewModel();
                 tmp = TinyMapper.Map(child, tmp);
                 tmp.RouteUrl = ConfigHelper.GetConfigurationValue("appSettings:AdminDomain") + tmp.RouteUrl;
-                tmp.Children = GetHomeTreeMenu(m => m.ParentId == tmp.Id && m.Activable && m.Visiable);
+                tmp.Children = GetHomeTreeMenu(m => m.ParentId == tmp.Id && m.Active && m.Visible);
                 reslut.Add(tmp);
             }
             return reslut;
@@ -67,7 +67,7 @@ namespace Zxw.Framework.Website.Repositories
             {
                 var tmp = new SysMenuViewModel();
                 tmp = TinyMapper.Map(child, tmp);
-                tmp.Children = GetTreeMenu(m => m.ParentId == tmp.Id && m.Activable);
+                tmp.Children = GetTreeMenu(m => m.ParentId == tmp.Id && m.Active);
                 reslut.Add(tmp);
             }
             return reslut;

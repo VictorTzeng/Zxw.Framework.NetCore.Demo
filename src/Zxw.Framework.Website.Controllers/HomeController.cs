@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Zxw.Framework.NetCore.Attributes;
-using Zxw.Framework.NetCore.CodeGenerator;
 using Zxw.Framework.NetCore.Options;
 using Zxw.Framework.Website.Controllers.Filters;
 using Zxw.Framework.Website.IRepositories;
@@ -50,12 +49,12 @@ namespace Zxw.Framework.Website.Controllers
         public IActionResult Init([FromServices]IOptions<CodeGenerateOption> options)
         {
             InitSysMenus(options.Value.ControllersNamespace);
-            if (!userRepository.Exist(m => m.SysUserName.Equals("admin", StringComparison.OrdinalIgnoreCase) && m.Activable))
+            if (!userRepository.Exist(m => m.SysUserName.Equals("admin", StringComparison.OrdinalIgnoreCase) && m.Active))
             {
                 userRepository.Add(new SysUser()
                 {
                     SysUserName = "admin",
-                    Activable = true,
+                    Active = true,
                     EMail = "admin@demo.com",
                     SysPassword = "123456",
                     Telephone = "13888888888"
@@ -85,9 +84,10 @@ namespace Zxw.Framework.Website.Controllers
                     {
                         menuRepository.Add(new SysMenu()
                         {
+                            Id = Guid.NewGuid().ToString(),
                             MenuName = type.GetCustomAttribute<ControllerDescriptionAttribute>()?.Name??parentIdentity,
-                            Activable = true,
-                            Visiable = true,
+                            Active = true,
+                            Visible = true,
                             Identity = parentIdentity,
                             RouteUrl = "",
                             ParentId = String.Empty
@@ -101,9 +101,10 @@ namespace Zxw.Framework.Website.Controllers
                         {
                             menuRepository.Add(new SysMenu()
                             {
+                                Id = Guid.NewGuid().ToString(),
                                 MenuName = method.GetCustomAttribute<ActionDescriptionAttribute>()?.Name ?? method.Name,
-                                Activable = true,
-                                Visiable = method.GetCustomAttribute<AjaxRequestOnlyAttribute>() == null,
+                                Active = true,
+                                Visible = method.GetCustomAttribute<AjaxRequestOnlyAttribute>() == null,
                                 Identity = identity,
                                 RouteUrl = identity,
                                 ParentId = identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)

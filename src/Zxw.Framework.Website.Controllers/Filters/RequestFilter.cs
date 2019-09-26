@@ -20,8 +20,8 @@ namespace Zxw.Framework.Website.Controllers.Filters
             {
                 var repository =
                     AspectCoreContainer.Resolve<ISysMenuRepository>();
-                if (repository.Count(
-                        m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase) && m.Activable) <= 0)
+                if (!repository.Exist(
+                        m => identity.Trim().Equals(m.Identity.Trim(), StringComparison.OrdinalIgnoreCase) && m.Active))
                 {
                     if (context.HttpContext.Request.IsAjaxRequest())
                     {

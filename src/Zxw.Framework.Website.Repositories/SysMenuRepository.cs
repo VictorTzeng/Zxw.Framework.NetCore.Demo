@@ -41,7 +41,7 @@ namespace Zxw.Framework.Website.Repositories
         public Task<IList<SysMenu>> GetMenusByCacheAsync(Expression<Func<SysMenu, bool>> @where)
         {
             return Task.Factory.StartNew<IList<SysMenu>>(
-                () => AspectCoreContainer.Resolve<IDbContextCore>().Get(where).ToList()
+                () => ServiceLocator.Resolve<IDbContextCore>().Get(where).ToList()
             );
         }
 

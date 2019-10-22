@@ -34,15 +34,9 @@ namespace Zxw.Framework.Website
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            return InitIoC(services);
+            InitIoC(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,12 +58,18 @@ namespace Zxw.Framework.Website
             app.UseRouting();
 
             app.UseCors();
-
             app.UseAuthentication();
-
+            app.UseAuthorization();
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                CheckConsentNeeded = context => true,
+                MinimumSameSitePolicy = SameSiteMode.None
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
         /// <summary>
@@ -107,6 +107,7 @@ namespace Zxw.Framework.Website
             {
                 options.ConnectionString = dbConnectionString;
                 options.ModelAssemblyName = "Zxw.Framework.Website.Models";
+                options.IsOutputSql = true;
             });
 
             #endregion
@@ -149,7 +150,7 @@ namespace Zxw.Framework.Website
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
-            return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector
+            return services.BuildAspectCoreServiceProvider();//接入AspectCore.Injector
         }
     }
 }

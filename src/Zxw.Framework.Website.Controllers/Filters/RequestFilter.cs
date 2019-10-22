@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Extensions;
@@ -16,26 +20,44 @@ namespace Zxw.Framework.Website.Controllers.Filters
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var identity = context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"];
+
             if (!context.Filters.Contains(new IgnoreAttribute()))
             {
-                var repository =
-                    AspectCoreContainer.Resolve<ISysMenuRepository>();
-                if (!repository.Exist(
-                        m => identity.Trim().Equals(m.Identity.Trim(), StringComparison.OrdinalIgnoreCase) && m.Active))
+                if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
                 {
-                    if (context.HttpContext.Request.IsAjaxRequest())
+                    var actionAttributes =
+                        controllerActionDescriptor.MethodInfo.GetCustomAttributes(typeof(AllowAnonymousAttribute), true);
+                    if (!actionAttributes.Any())
                     {
-                        context.Result = new JsonResult(new {success = false, msg = "您请求的地址不存在，或者已被停用."});
+                        ValidIdentity(context, identity);
                     }
-                    else
-                    {
-                        context.Result = new ViewResult() {ViewName = "NotFound"};
-                        context.HttpContext.Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                    }
+                }
+                else
+                {
+                    ValidIdentity(context, identity);
                 }
             }
 
             await base.OnActionExecutionAsync(context, next);
+        }
+
+        private void ValidIdentity(ActionExecutingContext context, string identity)
+        {
+            var repository =
+                ServiceLocator.Resolve<ISysMenuRepository>();
+            if (!repository.Get(
+                m => identity.Trim().Equals(m.Identity.Trim(), StringComparison.OrdinalIgnoreCase) && m.Active).Any())
+            {
+                if (context.HttpContext.Request.IsAjaxRequest())
+                {
+                    context.Result = new JsonResult(new {success = false, msg = "您请求的地址不存在，或者已被停用."});
+                }
+                else
+                {
+                    context.Result = new ViewResult() {ViewName = "NotFound"};
+                    context.HttpContext.Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
+                }
+            }
         }
     }
 }

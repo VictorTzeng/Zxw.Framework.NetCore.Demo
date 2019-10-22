@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Zxw.Framework.NetCore.Attributes;
+using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.NetCore.Options;
 using Zxw.Framework.Website.Controllers.Filters;
 using Zxw.Framework.Website.IRepositories;
@@ -46,13 +47,15 @@ namespace Zxw.Framework.Website.Controllers
 
         [AllowAnonymous,Ignore]
         [ActionDescription(Name = "初始化菜单")]
-        public IActionResult Init([FromServices]IOptions<CodeGenerateOption> options)
+        public IActionResult Init()
         {
-            InitSysMenus(options.Value.ControllersNamespace);
+            var options = ServiceLocator.Resolve<IOptions<CodeGenerateOption>>();
+            //InitSysMenus(options.Value.ControllersNamespace);
             if (!userRepository.Exist(m => m.SysUserName.Equals("admin", StringComparison.OrdinalIgnoreCase) && m.Active))
             {
                 userRepository.Add(new SysUser()
                 {
+                    Id = Guid.NewGuid().ToString(),
                     SysUserName = "admin",
                     Active = true,
                     EMail = "admin@demo.com",

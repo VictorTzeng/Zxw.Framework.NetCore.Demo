@@ -1,22 +1,20 @@
-Ôªøusing log4net;
-using log4net.Repository;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text;
+using log4net;
+using log4net.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Filters;
 using Zxw.Framework.NetCore.Helpers;
-using Zxw.Framework.NetCore.IoC;
-using Zxw.Framework.NetCore.Options;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Zxw.Framework.NetCore.Cache;
 using Zxw.Framework.NetCore.IDbContext;
+using Zxw.Framework.NetCore.Options;
 
 namespace Zxw.Framework.Website
 {
@@ -26,7 +24,7 @@ namespace Zxw.Framework.Website
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //ÂàùÂßãÂåñlog4net
+            //≥ı ºªØlog4net
             Repository = LogManager.CreateRepository("NETCoreRepository");
             Log4NetHelper.SetConfig(Repository, "log4net.config");
         }
@@ -73,7 +71,7 @@ namespace Zxw.Framework.Website
             });
         }
         /// <summary>
-        /// IoCÂàùÂßãÂåñ
+        /// IoC≥ı ºªØ
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
@@ -85,9 +83,9 @@ namespace Zxw.Framework.Website
             #region Redis
 
             //var redisConnectionString = Configuration.GetConnectionString("Redis");
-            ////ÂêØÁî®Redis
+            ////∆Ù”√Redis
             //services.UseCsRedisClient(redisConnectionString);
-            //ÂÖ®Â±ÄËÆæÁΩÆRedisÁºìÂ≠òÊúâÊïàÊó∂Èó¥‰∏∫5ÂàÜÈíü„ÄÇ
+            //»´æ÷…Ë÷√Redisª∫¥Ê”––ß ±º‰Œ™5∑÷÷”°£
             //services.Configure<DistributedCacheEntryOptions>(option =>
             //    option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));
 
@@ -95,14 +93,14 @@ namespace Zxw.Framework.Website
 
             #region MemoryCache
 
-            //ÂêØÁî®MemoryCache
+            //∆Ù”√MemoryCache
             //services.AddMemoryCache();
 
             #endregion
 
-            #region ÈÖçÁΩÆDbContextOption
+            #region ≈‰÷√DbContextOption
 
-            //ÈÖçÁΩÆDbContextOption
+            //≈‰÷√DbContextOption
             services.Configure<DbContextOption>(options =>
             {
                 options.ConnectionString = dbConnectionString;
@@ -112,9 +110,9 @@ namespace Zxw.Framework.Website
 
             #endregion
 
-            #region ÈÖçÁΩÆCodeGenerateOption
+            #region ≈‰÷√CodeGenerateOption
 
-            //ÈÖçÁΩÆCodeGenerateOption
+            //≈‰÷√CodeGenerateOption
             services.Configure<CodeGenerateOption>(options =>
             {
                 options.ModelsNamespace = "Zxw.Framework.Website.Models";
@@ -125,12 +123,12 @@ namespace Zxw.Framework.Website
 
             #endregion
 
-            #region ÂêÑÁßçÊ≥®ÂÖ•
+            #region ∏˜÷÷◊¢»Î
 
-            services.AddSingleton(Configuration)//Ê≥®ÂÖ•ConfigurationÔºåConfigHelperË¶ÅÁî®
-                //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//Ê≥®ÂÖ•EF‰∏ä‰∏ãÊñá
-                .AddDbContext<IDbContextCore, SqlServerDbContext>()//Ê≥®ÂÖ•EF‰∏ä‰∏ãÊñá
-                .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//Ê≥®ÂÖ•‰ªìÂÇ®
+            services.AddSingleton(Configuration)//◊¢»ÎConfiguration£¨ConfigHelper“™”√
+                                                //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//◊¢»ÎEF…œœ¬Œƒ
+                .AddDbContext<IDbContextCore, SqlServerDbContext>()//◊¢»ÎEF…œœ¬Œƒ
+                .AddScopedAssembly("Zxw.Framework.Website.IRepositories", "Zxw.Framework.Website.Repositories");//◊¢»Î≤÷¥¢
 
             #endregion
 
@@ -144,13 +142,13 @@ namespace Zxw.Framework.Website
             services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddMvc(option =>
-                {
-                    option.Filters.Add(new GlobalExceptionFilter());
-                })
+            {
+                option.Filters.Add(new GlobalExceptionFilter());
+            })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
-            return services.BuildAspectCoreServiceProvider();//Êé•ÂÖ•AspectCore.Injector
+            return services.BuildAspectCoreServiceProvider();//Ω”»ÎAspectCore.Injector
         }
     }
 }

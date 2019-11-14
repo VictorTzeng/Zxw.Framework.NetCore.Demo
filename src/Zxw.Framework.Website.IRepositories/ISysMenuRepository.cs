@@ -23,5 +23,7 @@ namespace Zxw.Framework.Website.IRepositories
         //[MemoryCache(CacheKey = "Memory_Cache_SysMenuAsync", Expiration = 5)]
         //[RedisCache(CacheKey = "Redis_Cache_SysMenuAsync", Expiration = 5)]
         Task<IList<SysMenu>> GetMenusByCacheAsync(Expression<Func<SysMenu, bool>> where);
+
+        SysMenu GetMenuByIdentity(string identity);
     }
 }

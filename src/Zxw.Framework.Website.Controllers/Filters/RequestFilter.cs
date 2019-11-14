@@ -45,8 +45,8 @@ namespace Zxw.Framework.Website.Controllers.Filters
         {
             var repository =
                 ServiceLocator.Resolve<ISysMenuRepository>();
-            if (!repository.Get(
-                m => identity.Trim().Equals(m.Identity.Trim(), StringComparison.OrdinalIgnoreCase) && m.Active).Any())
+            if (repository.GetMenuByIdentity(
+                identity)==null)
             {
                 if (context.HttpContext.Request.IsAjaxRequest())
                 {

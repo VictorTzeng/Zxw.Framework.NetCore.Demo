@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nelibur.ObjectMapper;
 using Zxw.Framework.NetCore.Helpers;
 using Zxw.Framework.NetCore.IDbContext;
@@ -71,6 +72,11 @@ namespace Zxw.Framework.Website.Repositories
                 reslut.Add(tmp);
             }
             return reslut;
+        }
+        public SysMenu GetMenuByIdentity(string identity)
+        {
+            if (string.IsNullOrEmpty(identity)) return null;
+            return DbContext.GetDbSet<SysMenu>().AsNoTracking().FirstOrDefault(m => identity == m.Identity && m.Active);
         }
     }
 }

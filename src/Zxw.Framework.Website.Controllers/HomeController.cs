@@ -50,7 +50,7 @@ namespace Zxw.Framework.Website.Controllers
         public IActionResult Init()
         {
             var options = ServiceLocator.Resolve<IOptions<CodeGenerateOption>>();
-            //InitSysMenus(options.Value.ControllersNamespace);
+            InitSysMenus(options.Value.ControllersNamespace);
             if (!userRepository.Exist(m => m.SysUserName.Equals("admin", StringComparison.OrdinalIgnoreCase) && m.Active))
             {
                 userRepository.Add(new SysUser()
@@ -63,7 +63,7 @@ namespace Zxw.Framework.Website.Controllers
                     Telephone = "13888888888"
                 });
             }
-            return Ok();
+            return RedirectToAction("Index","Account");
         }
 
         /// <summary>

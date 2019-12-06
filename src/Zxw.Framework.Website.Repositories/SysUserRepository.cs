@@ -19,10 +19,10 @@ namespace Zxw.Framework.Website.Repositories
         {
             var result = false;
             var model = GetSingleOrDefault(m =>
-                (m.SysUserName.Equals(account)
-                 || m.Telephone.Equals(account)
-                 || m.EMail.Equals(account, StringComparison.OrdinalIgnoreCase))
-                && password.Equals(m.SysPassword));
+                (m.SysUserName == account
+                 || m.Telephone== account
+                 || m.EMail == account)
+                && password == m.SysPassword);
             if (model != null && model.Active)
             {
                 model.LatestLoginDateTime = DateTime.Now;

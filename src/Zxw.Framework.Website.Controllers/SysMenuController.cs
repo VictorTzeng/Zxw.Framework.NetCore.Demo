@@ -28,8 +28,8 @@ namespace Zxw.Framework.Website.Controllers
         [ActionDescription(Name = "菜单列表")]
         public IActionResult Index()
         {
-            menuRepository.GetMenusByCache(m => true);
-            menuRepository.GetMenusByCacheAsync(m => true);
+            //menuRepository.GetMenusByCache(m => true);
+            //menuRepository.GetMenusByCacheAsync(m => true);
             return View();
         }
         [ActionDescription(Name = "新建菜单")]
@@ -155,7 +155,7 @@ namespace Zxw.Framework.Website.Controllers
                 Expression<Func<SysMenu, bool>> filter = m=>true;
                 if(!string.IsNullOrEmpty(keyword))
                     filter = filter.And(m=>m.Identity.Contains(keyword));
-                var total = menuRepository.CountAsync(filter).Result;
+                var total = menuRepository.Count(filter);
                 var rows = menuRepository.GetByPagination(filter, pageSize, pageIndex, true,
                     m => m.Id).ToList();
                 return Json(PaginationResult.PagedResult(rows, total, pageSize, pageIndex));

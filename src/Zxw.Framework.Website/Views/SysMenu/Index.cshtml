@@ -46,15 +46,15 @@
                         <td data-bind="text:routeUrl" style="text-align: left;"></td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" data-bind="checked:activable, click:function(){$root.active('@Url.Action("Active")/'+id(),{});}">
+                                <input type="checkbox" data-bind="checked:active, click:function(){$root.active('@Url.Action("Active")/'+id(),{});}">
                                 <span class="slider round"></span>
                             </label>
                         </td>
                         <td>
-                            <!-- ko if:visiable() -->
+                            <!-- ko if:visible() -->
                             <i class="fa fa-eye fa-2x" style="color: #55a856; cursor: pointer;" data-bind="click:function(){$root.visualize('@Url.Action("Visualize")/'+id(),{});}"></i>
                             <!-- /ko -->
-                            <!-- ko ifnot:visiable() -->
+                            <!-- ko ifnot:visible() -->
                             <i class="fa fa-eye-slash fa-2x" style="cursor: pointer;" data-bind="click:function(){$root.visualize('@Url.Action("Visualize")/'+id(),{});}"></i>
                             <!-- /ko -->
                         </td>

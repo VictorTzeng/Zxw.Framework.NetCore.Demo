@@ -43,8 +43,7 @@ namespace Zxw.Framework.Website.Controllers.Filters
 
         private void ValidIdentity(ActionExecutingContext context, string identity)
         {
-            var repository =
-                ServiceLocator.Resolve<ISysMenuRepository>();
+            var repository = (ISysMenuRepository)context.HttpContext.RequestServices.GetService(typeof(ISysMenuRepository));
             if (repository.GetMenuByIdentity(
                 identity)==null)
             {

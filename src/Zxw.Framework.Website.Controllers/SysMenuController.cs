@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Models;
+using Zxw.Framework.NetCore.Web;
 using Zxw.Framework.Website.Controllers.Filters;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
@@ -17,11 +18,11 @@ namespace Zxw.Framework.Website.Controllers
     [ControllerDescription(Name = "菜单管理")]
     public class SysMenuController : BaseController
     {
-        private ISysMenuRepository menuRepository;
+        //private ISysMenuRepository menuRepository;
         
-        public SysMenuController(ISysMenuRepository menuRepository)
+        public SysMenuController(IWebContext webContext):base(webContext)
         {
-            this.menuRepository = menuRepository ?? throw new ArgumentNullException(nameof(menuRepository));
+            //this.menuRepository = menuRepository ?? throw new ArgumentNullException(nameof(menuRepository));
         }
 
         #region Views
@@ -38,9 +39,9 @@ namespace Zxw.Framework.Website.Controllers
             return View();
         }
         [ActionDescription(Name = "编辑菜单")]
-        public IActionResult Edit(string id)
+        public Task<IActionResult> Edit(string id)
         {
-            return View(menuRepository.GetSingle(id));
+            return Task.Factory.StartNew<IActionResult>(() => View(this.GetService<ISysMenuRepository>().GetSingle(id)));
         }
 
         #endregion
@@ -52,7 +53,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var rows = menuRepository
+                var rows = this.GetService<ISysMenuRepository>()
                     .GetHomeMenusByTreeView(m => m.Active && m.Visible && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
@@ -63,7 +64,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var rows = menuRepository
+                var rows = this.GetService<ISysMenuRepository>()
                     .GetHomeMenusByTreeView(m => m.Active && m.Visible && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).Select(ToJsonViewModel).ToList();
                 return Json(ExcutedResult.SuccessResult(rows));
@@ -98,7 +99,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var nodes = menuRepository.GetMenusByTreeView(m => m.Active && string.IsNullOrEmpty(m.ParentId))
+                var nodes = this.GetService<ISysMenuRepository>().GetMenusByTreeView(m => m.Active && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).Select(m => GetTreeMenus(m, parentId)).ToList();
                 var rows = new[]
                 {
@@ -152,6 +153,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
+                var menuRepository = this.GetService<ISysMenuRepository>();
                 Expression<Func<SysMenu, bool>> filter = m=>true;
                 if(!string.IsNullOrEmpty(keyword))
                     filter = filter.And(m=>m.Identity.Contains(keyword));
@@ -173,6 +175,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if(!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
+                var menuRepository = this.GetService<ISysMenuRepository>();
                 menuRepository.AddAsync(menu);
                 return Json(ExcutedResult.SuccessResult());
             });
@@ -189,6 +192,7 @@ namespace Zxw.Framework.Website.Controllers
             {
                 if (!ModelState.IsValid)
                     return Json(ExcutedResult.FailedResult("数据验证失败"));
+                var menuRepository = this.GetService<ISysMenuRepository>();
                 menuRepository.Edit(menu);
                 return Json(ExcutedResult.SuccessResult());
             });
@@ -203,6 +207,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
+                var menuRepository = this.GetService<ISysMenuRepository>();
                 menuRepository.Delete(id);
                 return Json(ExcutedResult.SuccessResult("成功删除一条数据。"));
             });
@@ -218,6 +223,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
+                var menuRepository = this.GetService<ISysMenuRepository>();
                 var entity = menuRepository.GetSingle(id);
                 entity.Active = !entity.Active;
                 menuRepository.Update(entity, "Active");
@@ -234,6 +240,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
+                var menuRepository = this.GetService<ISysMenuRepository>();
                 var entity = menuRepository.GetSingle(id);
                 entity.Visible = !entity.Visible;
                 menuRepository.Update(entity, "Visible");

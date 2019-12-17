@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.Extensions;
+using Zxw.Framework.NetCore.Web;
 using Zxw.Framework.Website.Controllers.Filters;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
@@ -17,11 +18,9 @@ namespace Zxw.Framework.Website.Controllers
     [ControllerDescription(Name = "登录/注销")]
     public class AccountController:BaseController
     {
-        private ISysUserRepository _userRepository;
 
-        public AccountController(ISysUserRepository userRepository)
+        public AccountController(IWebContext webContext):base(webContext)
         {
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         [AllowAnonymous]
@@ -39,12 +38,14 @@ namespace Zxw.Framework.Website.Controllers
 
         [HttpPost, AjaxRequestOnly, ValidateAntiForgeryToken]
         [ActionDescription(Name = "屏幕解锁")]
-        public IActionResult Unlock(string password)
+        public async Task<IActionResult> Unlock(string password)
         {
-            var result = _userRepository.Exist(m =>
-                m.Active && m.SysUserName.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
-                m.SysPassword.Equals(password));
-            return Json(new {success = result});
+            return await Task.Factory.StartNew(() => {
+                var result = this.GetService<ISysUserRepository>().Exist(m =>
+                    m.Active && m.SysUserName.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
+                    m.SysPassword.Equals(password));
+                return SucceedJson(string.Empty);
+            });
         }
 
         [ HttpPost, AllowAnonymous, AjaxRequestOnly, ValidateAntiForgeryToken]
@@ -54,7 +55,7 @@ namespace Zxw.Framework.Website.Controllers
             var account = Request.Form["account"][0];
             var password = Request.Form["password"][0];
             var msg= "登录成功";
-            var result = _userRepository.Login(account, password, HttpContext.GetUserIp());
+            var result = this.GetService<ISysUserRepository>().Login(account, password, HttpContext.GetUserIp());
 
             if (result.Item2 == null)
             {
@@ -94,7 +95,7 @@ namespace Zxw.Framework.Website.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var result = _userRepository.EditProfile(user.Id, user.Telephone, user.SysUserName, user.EMail);
+                    var result = this.GetService<ISysUserRepository>().EditProfile(user.Id, user.Telephone, user.SysUserName, user.EMail);
                     success = result.Item1;
                     msg = result.Item2;
                 }
@@ -108,7 +109,7 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
-                var result = _userRepository.ChangePassword(userId, oldPwd, newPwd);
+                var result = this.GetService<ISysUserRepository>().ChangePassword(userId, oldPwd, newPwd);
                 return Json(new {success = result.Item1, msg = result.Item2});
             });
         }
@@ -123,7 +124,7 @@ namespace Zxw.Framework.Website.Controllers
                 var msg = "数据验证失败";
                 if (ModelState.IsValid)
                 {
-                    success = _userRepository.SignUp(user.Telephone, user.SysUserName, user.SysPassword, user.EMail);
+                    success = this.GetService<ISysUserRepository>().SignUp(user.Telephone, user.SysUserName, user.SysPassword, user.EMail);
                     msg = success?"注册成功":"注册失败";
                 }
                 return Json(new {success, msg});

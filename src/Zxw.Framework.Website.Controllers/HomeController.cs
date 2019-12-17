@@ -4,10 +4,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Zxw.Framework.NetCore.Attributes;
+using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.IoC;
 using Zxw.Framework.NetCore.Options;
+using Zxw.Framework.NetCore.Web;
 using Zxw.Framework.Website.Controllers.Filters;
 using Zxw.Framework.Website.IRepositories;
 using Zxw.Framework.Website.Models;
@@ -17,13 +20,13 @@ namespace Zxw.Framework.Website.Controllers
     [ControllerDescription(Name = "首页")]
     public class HomeController : BaseController
     {
-        private ISysMenuRepository menuRepository;
-        private ISysUserRepository userRepository;
-        public HomeController(ISysMenuRepository menuRepository, ISysUserRepository userRepository)
+        //private ISysMenuRepository menuRepository;
+        //private ISysUserRepository userRepository;
+        public HomeController(IWebContext webContext):base(webContext)
         {
             //CodeGenerator.Generate();//生成所有实体类对应的Repository和Service层代码文件
-            this.menuRepository = menuRepository;
-            this.userRepository = userRepository;
+            //this.menuRepository = menuRepository;
+            //this.userRepository = userRepository;
         }
         [ActionDescription(Name = "首页")]
         public IActionResult Index()
@@ -47,23 +50,26 @@ namespace Zxw.Framework.Website.Controllers
 
         [AllowAnonymous,Ignore]
         [ActionDescription(Name = "初始化菜单")]
-        public IActionResult Init()
+        public async Task<IActionResult> Init()
         {
-            var options = ServiceLocator.Resolve<IOptions<CodeGenerateOption>>();
-            InitSysMenus(options.Value.ControllersNamespace);
-            if (!userRepository.Exist(m => m.SysUserName.Equals("admin", StringComparison.OrdinalIgnoreCase) && m.Active))
-            {
-                userRepository.Add(new SysUser()
+            return await Task.Factory.StartNew(() => {
+                var options = ServiceLocator.Resolve<IOptions<CodeGenerateOption>>();
+                InitSysMenus(options.Value.ControllersNamespace);
+                var userRepository = this.GetService<ISysUserRepository>();
+                if (!userRepository.Exist(m => m.SysUserName == "admin" && m.Active))
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    SysUserName = "admin",
-                    Active = true,
-                    EMail = "admin@demo.com",
-                    SysPassword = "123456",
-                    Telephone = "13888888888"
-                });
-            }
-            return RedirectToAction("Index","Account");
+                    userRepository.Add(new SysUser()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        SysUserName = "admin",
+                        Active = true,
+                        EMail = "admin@demo.com",
+                        SysPassword = "123456",
+                        Telephone = "13888888888"
+                    });
+                }
+                return RedirectToAction("Index", "Account");
+            });
         }
 
         /// <summary>
@@ -71,6 +77,7 @@ namespace Zxw.Framework.Website.Controllers
         /// </summary>
         private void InitSysMenus(string controllerAssemblyName)
         {
+            var menuRepository = this.GetService<ISysMenuRepository>();
             var assembly = Assembly.Load(controllerAssemblyName);
             var types = assembly?.GetTypes();
             var list = types?.Where(t => !t.IsAbstract && t.IsPublic && t.IsSubclassOf(typeof(Controller))).ToList();
@@ -83,7 +90,7 @@ namespace Zxw.Framework.Website.Controllers
                         m.IsPublic && (m.ReturnType == typeof(IActionResult) ||
                                        m.ReturnType == typeof(Task<IActionResult>)));
                     var parentIdentity = $"{controllerName}";
-                    if (menuRepository.Count(m => m.Identity.Equals(parentIdentity, StringComparison.OrdinalIgnoreCase)) == 0)
+                    if (menuRepository.Count(m => EF.Functions.Contains(m.Identity, parentIdentity)) == 0)
                     {
                         menuRepository.Add(new SysMenu()
                         {

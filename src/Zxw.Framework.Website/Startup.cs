@@ -15,6 +15,7 @@ using Zxw.Framework.NetCore.Filters;
 using Zxw.Framework.NetCore.Helpers;
 using Zxw.Framework.NetCore.IDbContext;
 using Zxw.Framework.NetCore.Options;
+using Zxw.Framework.NetCore.Web;
 
 namespace Zxw.Framework.Website
 {
@@ -148,7 +149,9 @@ namespace Zxw.Framework.Website
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
-            return services.AddCoreX(config=> { });//接入AspectCore.Injector
+            return services.AddCoreX(config=> {
+                config.AddSingleton<IWebContext, DemoWebContext>();
+            });//接入AspectCore.Injector
         }
     }
 }

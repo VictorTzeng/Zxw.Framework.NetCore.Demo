@@ -139,7 +139,7 @@ namespace Zxw.Framework.Website
                     options.LogoutPath = "/Account/Logout";
                 });
             services.AddOptions();
-            services.AddHttpContextAccessor();
+            //services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddMvc(option =>
             {
@@ -148,7 +148,7 @@ namespace Zxw.Framework.Website
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
-            return services.BuildAspectCoreServiceProvider();//接入AspectCore.Injector
+            return services.AddCoreX(config=> { });//接入AspectCore.Injector
         }
     }
 }

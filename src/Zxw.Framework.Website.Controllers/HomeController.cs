@@ -125,7 +125,6 @@ namespace Zxw.Framework.Website.Controllers
         {
             if (disposing)
             {
-                menuRepository.Dispose();
             }
             base.Dispose(disposing);
         }

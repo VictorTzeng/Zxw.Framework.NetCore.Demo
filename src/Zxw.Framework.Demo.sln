@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website.Repos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website.Controllers", "Zxw.Framework.Website.Controllers\Zxw.Framework.Website.Controllers.csproj", "{F8405975-46F5-43D8-931E-98855C707793}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zxw.Framework.Website", "Zxw.Framework.Website\Zxw.Framework.Website.csproj", "{F1E788DF-1593-4F7E-9AA7-D72AA9646E41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website", "Zxw.Framework.Website\Zxw.Framework.Website.csproj", "{F1E788DF-1593-4F7E-9AA7-D72AA9646E41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

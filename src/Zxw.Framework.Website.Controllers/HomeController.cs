@@ -107,7 +107,7 @@ namespace Zxw.Framework.Website.Controllers
                     foreach (var method in methods)
                     {
                         var identity = $"{controllerName}/{method.Name}";
-                        if (menuRepository.Count(m => m.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase)) == 0)
+                        if (menuRepository.Count(m => m.Identity == identity) == 0)
                         {
                             menuRepository.Add(new SysMenu()
                             {

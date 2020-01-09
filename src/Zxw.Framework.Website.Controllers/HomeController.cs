@@ -90,7 +90,7 @@ namespace Zxw.Framework.Website.Controllers
                         m.IsPublic && (m.ReturnType == typeof(IActionResult) ||
                                        m.ReturnType == typeof(Task<IActionResult>)));
                     var parentIdentity = $"{controllerName}";
-                    if (menuRepository.Count(m => EF.Functions.Contains(m.Identity, parentIdentity)) == 0)
+                    if (menuRepository.Count(m => m.Identity!= null && m.Identity.Contains(parentIdentity, StringComparison.OrdinalIgnoreCase)) == 0)
                     {
                         menuRepository.Add(new SysMenu()
                         {

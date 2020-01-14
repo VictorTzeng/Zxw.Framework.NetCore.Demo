@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using AspectCore.Configuration;
 using log4net;
 using log4net.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Zxw.Framework.NetCore.Attributes;
 using Zxw.Framework.NetCore.DbContextCore;
 using Zxw.Framework.NetCore.Extensions;
 using Zxw.Framework.NetCore.Filters;
@@ -149,8 +151,12 @@ namespace Zxw.Framework.Website
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
-            return services.AddCoreX(config=> {
+            return services.AddCoreX(config =>
+            {
                 config.AddSingleton<IWebContext, DemoWebContext>();
+            }, aspectConfig =>
+            {
+                aspectConfig.Interceptors.AddTyped<FromDbContextFactoryInterceptor>();
             });//Ω”»ÎAspectCore.Injector
         }
     }

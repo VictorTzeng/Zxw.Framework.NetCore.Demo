@@ -31,6 +31,7 @@ namespace Zxw.Framework.Website.Controllers
         [ActionDescription(Name = "首页")]
         public IActionResult Index()
         {
+            this.GetService<ITestRepository>().Run();
             return View();
         }
         [AllowAnonymous]
@@ -90,7 +91,7 @@ namespace Zxw.Framework.Website.Controllers
                         m.IsPublic && (m.ReturnType == typeof(IActionResult) ||
                                        m.ReturnType == typeof(Task<IActionResult>)));
                     var parentIdentity = $"{controllerName}";
-                    if (menuRepository.Count(m => m.Identity!= null && m.Identity.Contains(parentIdentity, StringComparison.OrdinalIgnoreCase)) == 0)
+                    if (menuRepository.Count(m => m.Identity!= null && m.Identity.Contains(parentIdentity)) == 0)
                     {
                         menuRepository.Add(new SysMenu()
                         {

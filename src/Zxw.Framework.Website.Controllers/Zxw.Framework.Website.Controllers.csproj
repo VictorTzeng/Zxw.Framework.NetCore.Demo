@@ -8,17 +8,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-    <PackageReference Include="Zxw.Framework.NetCore" Version="3.1.3.2" />
+    <!--<PackageReference Include="Zxw.Framework.NetCore" Version="3.1.3.2" />-->
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Zxw.Framework.NetCore\Zxw.Framework.NetCore\Zxw.Framework.NetCore.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.IRepositories\Zxw.Framework.Website.IRepositories.csproj" />
     <ProjectReference Include="..\Zxw.Framework.Website.ViewModels\Zxw.Framework.Website.ViewModels.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Authentication.Cookies">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.authentication.cookies\2.0.3\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Cookies.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

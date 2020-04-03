@@ -29,9 +29,17 @@ namespace Zxw.Framework.Website.Controllers
             //this.userRepository = userRepository;
         }
         [ActionDescription(Name = "首页")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            this.GetService<ITestRepository>().Run();
+            await this.GetService<ISysRoleRepository>().AddAsync(new SysRole()
+            {
+                Active = true,
+                CreatedDateTime = DateTime.Now,
+                Id = Guid.NewGuid().ToString("N"),
+                NodePath = "",
+                ParentId = 0,
+                SysRoleName = "超级管理员"
+            });
             return View();
         }
         [AllowAnonymous]

@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website.Contr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.Website", "Zxw.Framework.Website\Zxw.Framework.Website.csproj", "{F1E788DF-1593-4F7E-9AA7-D72AA9646E41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zxw.Framework.NetCore", "..\..\Zxw.Framework.NetCore\Zxw.Framework.NetCore\Zxw.Framework.NetCore.csproj", "{68D83A38-C0B1-466A-8C89-9ECDD90F622C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{F1E788DF-1593-4F7E-9AA7-D72AA9646E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1E788DF-1593-4F7E-9AA7-D72AA9646E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1E788DF-1593-4F7E-9AA7-D72AA9646E41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68D83A38-C0B1-466A-8C89-9ECDD90F622C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68D83A38-C0B1-466A-8C89-9ECDD90F622C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68D83A38-C0B1-466A-8C89-9ECDD90F622C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68D83A38-C0B1-466A-8C89-9ECDD90F622C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

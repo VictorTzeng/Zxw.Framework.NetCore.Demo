@@ -136,7 +136,7 @@ namespace Zxw.Framework.Website
                     factory.AddDbContext<IDbContextCore, SqlServerDbContext>(
                         new DbContextOption()
                         {
-                            TagName = "db2",
+                            TagName = "db1",
                             ConnectionString = dbConnectionString,
                             ModelAssemblyName = "Zxw.Framework.Website.Models",
                             IsOutputSql = true

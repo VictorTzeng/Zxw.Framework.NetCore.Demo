@@ -14,7 +14,7 @@ namespace Zxw.Framework.Website.Repositories
     /// </summary>
     public class TestRepository : BaseRepository<SysMenu, string>, ITestRepository
     {
-        [FromDbContextFactory(tagName: "db2")]
+        [FromDbContextFactory(tagName: "db1")]
         public IDbContextCore dbFromFactory { get; set; }
         public TestRepository(IDbContextCore dbContext) : base(dbContext)
         {

@@ -6,6 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
-    <PackageReference Include="Zxw.Framework.NetCore" Version="3.1.4" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="3.1.4.1" />
   </ItemGroup>
 </Project>

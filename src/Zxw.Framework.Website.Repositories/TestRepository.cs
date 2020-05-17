@@ -15,14 +15,20 @@ namespace Zxw.Framework.Website.Repositories
     public class TestRepository : BaseRepository<SysMenu, string>, ITestRepository
     {
         [FromDbContextFactory(tagName: "db1")]
-        public IDbContextCore dbFromFactory { get; set; }
+        public ISqlServerDbContext dbFromFactory1 { get; set; }
+        [FromDbContextFactory(tagName: "db2")]
+        public ISqlServerDbContext dbFromFactory2 { get; set; }
+        [FromDbContextFactory(tagName: "db3")]
+        public ISqlServerDbContext dbFromFactory3 { get; set; }
         public TestRepository(IDbContextCore dbContext) : base(dbContext)
         {
         }
 
         public void Run()
         {
-            dbFromFactory.Get<SysMenu>();
+            dbFromFactory1.Get<SysMenu>();
+            dbFromFactory2.Get<SysMenu>();
+            dbFromFactory3.Get<SysMenu>();
         }
     }
 }

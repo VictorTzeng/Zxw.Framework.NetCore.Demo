@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AspectCore.Abstractions" Version="2.1.0" />
     <PackageReference Include="AspectCore.Extensions.Cache" Version="1.2.3" />
-    <PackageReference Include="Zxw.Framework.NetCore" Version="3.1.4" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="3.1.4.1" />
   </ItemGroup>
 
   <ItemGroup>

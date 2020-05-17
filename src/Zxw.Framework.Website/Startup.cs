@@ -130,13 +130,29 @@ namespace Zxw.Framework.Website
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
                                                 //.AddScoped<IDbContextCore, PostgreSQLDbContext>()//注入EF上下文
-                                                //.AddDbContext<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                                                .AddDbContext<IDbContextCore, SqlServerDbContext>()//注入EF上下文
             .AddDbContextFactory(factory =>
                 {
-                    factory.AddDbContext<IDbContextCore, SqlServerDbContext>(
+                    factory.AddDbContext<ISqlServerDbContext, SqlServerDbContext>(
                         new DbContextOption()
                         {
                             TagName = "db1",
+                            ConnectionString = dbConnectionString,
+                            ModelAssemblyName = "Zxw.Framework.Website.Models",
+                            IsOutputSql = true
+                        });
+                    factory.AddDbContext<ISqlServerDbContext, SqlServerDbContext>(
+                        new DbContextOption()
+                        {
+                            TagName = "db2",
+                            ConnectionString = dbConnectionString,
+                            ModelAssemblyName = "Zxw.Framework.Website.Models",
+                            IsOutputSql = true
+                        });
+                    factory.AddDbContext<ISqlServerDbContext, SqlServerDbContext>(
+                        new DbContextOption()
+                        {
+                            TagName = "db3",
                             ConnectionString = dbConnectionString,
                             ModelAssemblyName = "Zxw.Framework.Website.Models",
                             IsOutputSql = true

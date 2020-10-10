@@ -31,7 +31,7 @@ namespace Zxw.Framework.Website.Controllers
         [ActionDescription(Name = "首页")]
         public IActionResult Index()
         {
-            this.GetService<ITestRepository>().Run();
+            //this.GetService<ITestRepository>().Run();
             return View();
         }
         [AllowAnonymous]

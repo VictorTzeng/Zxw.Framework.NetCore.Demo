@@ -53,6 +53,8 @@ namespace Zxw.Framework.Website.Controllers
         {
             return Task.Factory.StartNew<IActionResult>(() =>
             {
+                var service = this.GetService<ISysMenuRepository>();
+                var list = this.GetService<ISysMenuRepository>().GetAsync(m => m.Active && m.Visible).Result;
                 var rows = this.GetService<ISysMenuRepository>()
                     .GetHomeMenusByTreeView(m => m.Active && m.Visible && string.IsNullOrEmpty(m.ParentId))
                     .OrderBy(m => m.SortIndex).ToList();

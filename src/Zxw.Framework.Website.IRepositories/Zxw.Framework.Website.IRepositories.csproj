@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspectCore.Abstractions" Version="2.1.0" />
     <PackageReference Include="AspectCore.Extensions.Cache" Version="1.2.3" />
-    <PackageReference Include="Zxw.Framework.NetCore" Version="3.1.4.8" />
+    <PackageReference Include="Zxw.Framework.NetCore" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

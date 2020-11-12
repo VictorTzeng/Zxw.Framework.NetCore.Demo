@@ -159,7 +159,7 @@ namespace Zxw.Framework.Website
             {
                 option.Filters.Add(new GlobalExceptionFilter());
             })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddControllersAsServices();
 
             return services.AddCoreX(config =>
